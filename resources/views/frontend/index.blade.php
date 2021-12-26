@@ -143,14 +143,10 @@
                               {{  $item->getTranslation('name')  }}
                             </a>
                           </h6>
-                          <div class="tags">
-                            <div class="rating rating-sm mt-1">
-                              {{ renderStarRating($product->rating) }}
-                          </div>
+                          <div class="tags"> 
                           </div>
                           <div class="price">
-                            <span class="price-text">{{ home_discounted_base_price($product) }}</span>
-                            <del class="fw-600 opacity-50 mr-1">{{ home_base_price($product) }}</del>
+                            <span class="price-text">{{ $item->unit_price }}</span> 
                           </div>
                         </div>
                       </div>

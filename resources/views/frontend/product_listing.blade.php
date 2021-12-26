@@ -512,13 +512,7 @@
                             <del class="fw-600 opacity-50 mr-1">{{ home_base_price($product) }}</del>
                           </div>
                           <div class="fadein-content">
-                            <div class="product-details">
-                              <p class="detail-content line-clamp line-clamp-3">
-                                Amet consectetur adipisicing elit. Ipsa quos
-                                delectus assumenda voluptatibus suscipit
-                                quibusdam maiores nostrum consequuntur, cumque
-                                eligendi!
-                              </p>
+                            <div class="product-details"> 
                               <div class="show-more">
                                 <i class="fa-solid fa-ellipsis"></i>
                               </div>
