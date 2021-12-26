@@ -39,11 +39,14 @@ class HomeController extends Controller
             return Category::where('featured', 1)->get();
         });
 
+        $featured_products = Cache::rememberForever('featured_products', function () {
+            return filter_products(Product::where('published', 1)->where('featured', '1'))->limit(12)->get();            
+        });
         $todays_deal_products = Cache::rememberForever('todays_deal_products', function () {
             return filter_products(Product::where('published', 1)->where('todays_deal', '1'))->get();            
         });
 
-        return view('frontend.index', compact('featured_categories', 'todays_deal_products'));
+        return view('frontend.index', compact('featured_categories', 'todays_deal_products','featured_products'));
     }
 
     public function login()
@@ -663,6 +666,7 @@ class HomeController extends Controller
                 ->get();
 
         return view("frontend.flash_deal.all_flash_deal_list", $data);
+        
     }
 
     public function all_seller(Request $request) {

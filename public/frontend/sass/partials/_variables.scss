@@ -1,0 +1,49 @@
+// colors
+$rw-red: #ff1a1a;
+$rw-green: #17a05d;
+$rw-blue: #011f7f;
+$rw-blue-border: rgb(42, 73, 165);
+$rw-green-hover: #148850;
+$rw-green-hover-light: #1fd17b;
+$rw-internal-light: #efefef;
+$rw-grey-100: #ffffff;
+$rw-grey-200: #fafafa;
+$rw-grey-300: #d7d8d9;
+$rw-grey-400: #848484;
+$rw-grey-500: #252625;
+$rw-bg-light: #f7f7f7;
+
+// fonts
+@font-face {
+  font-family: Cabin;
+  src: url(../../assets/webfonts/cabin/Cabin-Regular.ttf);
+}
+
+@font-face {
+  font-family: Lato;
+  src: url(../../assets/webfonts/lato/Lato-Regular.ttf);
+}
+
+@font-face {
+  font-family: Cabin;
+  src: url(../../assets/webfonts/cabin/Cabin-Medium.ttf);
+  font-weight: 500;
+}
+
+@font-face {
+  font-family: Lato;
+  src: url(../../assets/webfonts/lato/Lato-Light.ttf);
+  font-weight: 300;
+}
+
+@font-face {
+  font-family: Cabin;
+  src: url(../../assets/webfonts/cabin/Cabin-Bold.ttf);
+  font-weight: 700;
+}
+
+@font-face {
+  font-family: Lato;
+  src: url(../../assets/webfonts/lato/Lato-Bold.ttf);
+  font-weight: 700;
+}
