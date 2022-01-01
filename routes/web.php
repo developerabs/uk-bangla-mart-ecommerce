@@ -91,6 +91,7 @@ Route::get('/shop/{slug}/{type}', 'HomeController@filter_shop')->name('shop.visi
 Route::get('/cart', 'CartController@index')->name('cart');
 Route::post('/cart/show-cart-modal', 'CartController@showCartModal')->name('cart.showCartModal');
 Route::post('/cart/addtocart', 'CartController@addToCart')->name('cart.addToCart');
+Route::get('/cart/countCarts', 'CartController@countCarts')->name('cart.countCarts');
 Route::post('/cart/removeFromCart', 'CartController@removeFromCart')->name('cart.removeFromCart');
 Route::post('/cart/updateQuantity', 'CartController@updateQuantity')->name('cart.updateQuantity');
 

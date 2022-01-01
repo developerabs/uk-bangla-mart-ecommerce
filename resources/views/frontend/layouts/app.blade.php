@@ -8,6 +8,7 @@
       name="viewport"
       content="width=device-width, initial-scale=1, shrink-to-fit=no"
     />
+    <meta name="csrf-token" content="{{ csrf_token() }}">
 
     <!-- Bootstrap CSS v5.0.2 -->
     <link
@@ -23,9 +24,10 @@
 
     <!-- Tiny Slider CSS -->
     <link rel="stylesheet" href="{{ static_asset('frontend/assets/modules/tiny-slider/tiny-slider.css') }}" />
-
+    
     <!-- Custom CSS -->
     <link rel="stylesheet" href="{{ static_asset('frontend/assets/css/style.min.css') }}" />
+    <script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
   </head>
   <body>
     <div class="rw-website">

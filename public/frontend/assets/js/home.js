@@ -109,6 +109,7 @@ window.addEventListener('DOMContentLoaded', () => {
   (function () {
     const elem1 = document.querySelector('.specific-product .products-wrapper .products1');
     const elem2 = document.querySelector('.specific-product .products-wrapper .products2'); 
+    const elem3 = document.querySelector('.specific-product .products-wrapper .products3'); 
 
     function createSlider(elem,controls) {
       const slider = tns({
@@ -140,6 +141,7 @@ window.addEventListener('DOMContentLoaded', () => {
 
     createSlider(elem1,'manageControls1'); 
     createSlider(elem2,'manageControls2'); 
+    createSlider(elem3,'manageControls3'); 
   })();
 
   /*

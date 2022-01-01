@@ -41,6 +41,6 @@ class CompareController extends Controller
             $request->session()->put('compare', $compare);
         }
 
-        return view('frontend.partials.compare');
+        return 1; 
     }
 }

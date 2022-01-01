@@ -1,56 +1,74 @@
+@php
+if(auth()->user() != null) {
+    $user_id = Auth::user()->id;
+    $cart = \App\Models\Cart::where('user_id', $user_id)->get();
+} else {
+    $temp_user_id = Session()->get('temp_user_id');
+    if($temp_user_id) {
+        $cart = \App\Models\Cart::where('temp_user_id', $temp_user_id)->get();
+    }
+}
+
+@endphp
+
 <header id="header">
     <!-- Top Bar / start -->
     <section class="top-bar d-none d-lg-block">
       <div class="container">
         <nav class="top-bar-inner d-flex justify-content-between">
           <ul class="nav left">
+            @if(get_setting('show_language_switcher') == 'on')
             <li class="nav-item rw-dropdown">
+              @php
+                    if(Session::has('locale')){
+                        $locale = Session::get('locale', Config::get('app.locale'));
+                    }
+                    else{
+                        $locale = 'en';
+                    }
+                @endphp
               <a class="nav-link text-uppercase" href="#">
-                <span>English</span>
+                <span>{{ \App\Models\Language::where('code', $locale)->first()->name }}</span>
                 <i class="fas fa-angle-down text-muted"></i>
               </a>
               <!-- Top Bar Dropdown / start -->
               <ul class="rw-dropdown-menu">
+                @foreach (\App\Models\Language::all() as $key => $language)
                 <li>
-                  <a class="rw-dropdown-item" href="#">Deutsch</a>
+                  <a class="rw-dropdown-item" href="#">{{ $language->name }}</a>
                 </li>
-                <li>
-                  <a class="rw-dropdown-item" href="#">French</a>
-                </li>
-                <li>
-                  <a class="rw-dropdown-item" href="#">
-                    Requires WPML plugin</a
-                  >
-                </li>
+                @endforeach 
               </ul>
             </li>
+            @endif
+            @if(get_setting('show_currency_switcher') == 'on')
             <li class="nav-item rw-dropdown">
+              @php
+                  if(Session::has('currency_code')){
+                      $currency_code = Session::get('currency_code');
+                  }
+                  else{
+                      $currency_code = \App\Models\Currency::findOrFail(get_setting('system_default_currency'))->code;
+                  }
+              @endphp
               <a class="nav-link text-uppercase" href="#">
-                <span>Countery</span>
+                <span>
+                  {{ \App\Models\Currency::where('code', $currency_code)->first()->name }} {{ (\App\Models\Currency::where('code', $currency_code)->first()->symbol) }}
+                </span>
                 <i class="fas fa-angle-down text-muted"></i>
               </a>
               <!-- Top Bar Dropdown / start -->
               <ul class="rw-dropdown-menu">
+                @foreach (\App\Models\Currency::where('status', 1)->get() as $key => $currency)
                 <li>
                   <a class="rw-dropdown-item" href="#">
-                    United States (USD)
+                    {{ $currency->name }} ({{ $currency->symbol }})
                   </a>
                 </li>
-                <li>
-                  <a class="rw-dropdown-item" href="#">
-                    Deutschland (EUR)
-                  </a>
-                </li>
-                <li>
-                  <a class="rw-dropdown-item" href="#"> Japan (JPY) </a>
-                </li>
+                @endforeach 
               </ul>
-            </li>
-            <li class="nav-item">
-              <strong class="nav-link text-uppercase">
-                Free shipping for all orders of $150
-              </strong>
-            </li>
+            </li> 
+            @endif
           </ul>
           <ul class="nav right">
             <li class="nav-item">
@@ -172,10 +190,7 @@
                       <a class="nav-link" aria-current="page" href="#">
                         Home
                       </a>
-                    </li>
-                    <li class="nav-item">
-                      <a class="nav-link" href="#">Demos</a>
-                    </li>
+                    </li> 
                     <li class="nav-item">
                       <a class="nav-link" href="#">Shop</a>
                     </li>
@@ -348,39 +363,18 @@
             </a>
           </div>
           <div class="header-middle d-none d-lg-block">
-            <form action="#" method="post">
+            <form action="{{ route('search') }}" method="GET">
               <div class="input-group">
                 <input
                   type="search"
                   class="form-control form-control-lg"
+                  name="keyword"
                   aria-label="Select Category"
                   placeholder="Search for products"
-                />
-                <div class="input-group-text dropdown">
-                  <button
-                    type="button"
-                    class="dropdown-toggle"
-                    type="button"
-                    id="dropdownMenuHeaderSearch"
-                    data-bs-toggle="dropdown"
-                    aria-expanded="false"
-                  >
-                    <small class="me-3">Select Category</small>
-                    <i class="fas fa-angle-down text-muted"></i>
-                  </button>
-                  <!-- Top Bar Dropdown / start -->
-                  <ul
-                    class="dropdown-menu dropdown-menu-end"
-                    aria-labelledby="dropdownMenuHeaderSearch"
-                  >
-                    <li class="dropdown-item">Clocks</li>
-                    <li class="dropdown-item">Lighting</li>
-                    <li class="dropdown-item">Furniture</li>
-                    <li class="dropdown-item">Accessories</li>
-                    <li class="dropdown-item">Cooking</li>
-                    <li class="dropdown-item">Other</li>
-                  </ul>
-                </div>
+                  @isset($query)
+                  value="{{ $query }}"
+                  @endisset
+                /> 
                 <button type="submit" class="input-group-text">
                   <i class="fas fa-search fa-lg"></i>
                 </button>
@@ -524,13 +518,17 @@
                 </a>
               </li>
               <li class="nav-item d-none d-lg-inline-block">
-                <a class="nav-link text-uppercase" href="#">
+                <a class="nav-link text-uppercase" href="{{ route('compare') }}">
                   <div class="badge-group position-relative d-inline-block">
                     <i class="fa-solid fa-code-compare fa-lg"> </i>
                     <span
                       class="position-absolute translate-middle badge rounded-pill bg-danger"
                     >
-                      9
+                    @if(Session::has('compare'))
+                    {{ Session::get('compare') }}
+                    @else
+                        0
+                    @endif
                       <span class="visually-hidden">compare products</span>
                     </span>
                   </div>
@@ -550,14 +548,15 @@
                     <i class="fa-solid fa-bag-shopping fa-lg"></i>
                     <span
                       class="position-absolute translate-middle badge rounded-pill bg-danger"
+                      id="countCarts"
                     >
-                      9
-                      <span class="visually-hidden">added products</span>
+                    @if(isset($cart) && count($cart) > 0)
+                      {{ count($cart)}}
+                    @else
+                        0
+                    @endif 
                     </span>
-                  </div>
-                  <span class="d-none d-lg-inline-block"
-                    >$<span class="total-price">279.00</span></span
-                  >
+                  </div> 
                 </a>
                 <div
                   class="offcanvas offcanvas-end"
@@ -565,9 +564,10 @@
                   id="shoppingCart"
                   aria-labelledby="offcanvasShoppingCart"
                 >
+                @if(isset($cart) && count($cart) > 0)
                   <div class="offcanvas-header">
                     <h5 class="text-uppercase" id="offcanvasRightLabel">
-                      Shopping cart
+                      {{translate('Cart Items')}}
                     </h5>
                     <button
                       type="button"
@@ -581,6 +581,15 @@
                   </div>
                   <div class="offcanvas-body d-flex flex-column p-0">
                     <div class="product-container">
+                      @php
+                          $total = 0;
+                      @endphp
+                      @foreach($cart as $key => $cartItem)
+                      @php
+                          $product = \App\Models\Product::find($cartItem['product_id']);
+                          $total = $total + $cartItem['price'] * $cartItem['quantity'];
+                      @endphp
+                      @if ($product != null)
                       <div class="card">
                         <div class="row g-0">
                           <div class="col-3 pt-3">
@@ -629,294 +638,8 @@
                           </div>
                         </div>
                       </div>
-                      <div class="card">
-                        <div class="row g-0">
-                          <div class="col-3 pt-3">
-                            <img
-                              src="assets/images/retail-product-6-opt-330x340.jpg"
-                              class="img-fluid"
-                              alt="Product"
-                            />
-                          </div>
-                          <div class="col-9">
-                            <div class="card-body">
-                              <h6 class="card-title">Red Sneakers</h6>
-                              <div
-                                class="btn-group mb-2"
-                                role="group"
-                                aria-label="Product Button Group"
-                              >
-                                <button
-                                  type="button"
-                                  class="rw-btn-product"
-                                >
-                                  <i class="fa-solid fa-plus"></i>
-                                </button>
-                                <button
-                                  type="button"
-                                  class="rw-btn-product"
-                                >
-                                  <span class="counter">1</span>
-                                </button>
-                                <button
-                                  type="button"
-                                  class="rw-btn-product"
-                                >
-                                  <i class="fa-solid fa-minus"></i>
-                                </button>
-                              </div>
-                              <div class="product-quantity">
-                                <span class="quantity">1</span>
-                                <i class="fa-solid fa-xmark"></i>
-                                <span class="price">$273.00</span>
-                              </div>
-                              <button type="button" class="close-btn">
-                                <i class="fa-solid fa-xmark"></i>
-                              </button>
-                            </div>
-                          </div>
-                        </div>
-                      </div>
-                      <div class="card">
-                        <div class="row g-0">
-                          <div class="col-3 pt-3">
-                            <img
-                              src="assets/images/retail-product-6-opt-330x340.jpg"
-                              class="img-fluid"
-                              alt="Product"
-                            />
-                          </div>
-                          <div class="col-9">
-                            <div class="card-body">
-                              <h6 class="card-title">Red Sneakers</h6>
-                              <div
-                                class="btn-group mb-2"
-                                role="group"
-                                aria-label="Product Button Group"
-                              >
-                                <button
-                                  type="button"
-                                  class="rw-btn-product"
-                                >
-                                  <i class="fa-solid fa-plus"></i>
-                                </button>
-                                <button
-                                  type="button"
-                                  class="rw-btn-product"
-                                >
-                                  <span class="counter">1</span>
-                                </button>
-                                <button
-                                  type="button"
-                                  class="rw-btn-product"
-                                >
-                                  <i class="fa-solid fa-minus"></i>
-                                </button>
-                              </div>
-                              <div class="product-quantity">
-                                <span class="quantity">1</span>
-                                <i class="fa-solid fa-xmark"></i>
-                                <span class="price">$273.00</span>
-                              </div>
-                              <button type="button" class="close-btn">
-                                <i class="fa-solid fa-xmark"></i>
-                              </button>
-                            </div>
-                          </div>
-                        </div>
-                      </div>
-                      <div class="card">
-                        <div class="row g-0">
-                          <div class="col-3 pt-3">
-                            <img
-                              src="assets/images/retail-product-6-opt-330x340.jpg"
-                              class="img-fluid"
-                              alt="Product"
-                            />
-                          </div>
-                          <div class="col-9">
-                            <div class="card-body">
-                              <h6 class="card-title">Red Sneakers</h6>
-                              <div
-                                class="btn-group mb-2"
-                                role="group"
-                                aria-label="Product Button Group"
-                              >
-                                <button
-                                  type="button"
-                                  class="rw-btn-product"
-                                >
-                                  <i class="fa-solid fa-plus"></i>
-                                </button>
-                                <button
-                                  type="button"
-                                  class="rw-btn-product"
-                                >
-                                  <span class="counter">1</span>
-                                </button>
-                                <button
-                                  type="button"
-                                  class="rw-btn-product"
-                                >
-                                  <i class="fa-solid fa-minus"></i>
-                                </button>
-                              </div>
-                              <div class="product-quantity">
-                                <span class="quantity">1</span>
-                                <i class="fa-solid fa-xmark"></i>
-                                <span class="price">$273.00</span>
-                              </div>
-                              <button type="button" class="close-btn">
-                                <i class="fa-solid fa-xmark"></i>
-                              </button>
-                            </div>
-                          </div>
-                        </div>
-                      </div>
-                      <div class="card">
-                        <div class="row g-0">
-                          <div class="col-3 pt-3">
-                            <img
-                              src="assets/images/retail-product-6-opt-330x340.jpg"
-                              class="img-fluid"
-                              alt="Product"
-                            />
-                          </div>
-                          <div class="col-9">
-                            <div class="card-body">
-                              <h6 class="card-title">Red Sneakers</h6>
-                              <div
-                                class="btn-group mb-2"
-                                role="group"
-                                aria-label="Product Button Group"
-                              >
-                                <button
-                                  type="button"
-                                  class="rw-btn-product"
-                                >
-                                  <i class="fa-solid fa-plus"></i>
-                                </button>
-                                <button
-                                  type="button"
-                                  class="rw-btn-product"
-                                >
-                                  <span class="counter">1</span>
-                                </button>
-                                <button
-                                  type="button"
-                                  class="rw-btn-product"
-                                >
-                                  <i class="fa-solid fa-minus"></i>
-                                </button>
-                              </div>
-                              <div class="product-quantity">
-                                <span class="quantity">1</span>
-                                <i class="fa-solid fa-xmark"></i>
-                                <span class="price">$273.00</span>
-                              </div>
-                              <button type="button" class="close-btn">
-                                <i class="fa-solid fa-xmark"></i>
-                              </button>
-                            </div>
-                          </div>
-                        </div>
-                      </div>
-                      <div class="card">
-                        <div class="row g-0">
-                          <div class="col-3 pt-3">
-                            <img
-                              src="assets/images/retail-product-6-opt-330x340.jpg"
-                              class="img-fluid"
-                              alt="Product"
-                            />
-                          </div>
-                          <div class="col-9">
-                            <div class="card-body">
-                              <h6 class="card-title">Red Sneakers</h6>
-                              <div
-                                class="btn-group mb-2"
-                                role="group"
-                                aria-label="Product Button Group"
-                              >
-                                <button
-                                  type="button"
-                                  class="rw-btn-product"
-                                >
-                                  <i class="fa-solid fa-plus"></i>
-                                </button>
-                                <button
-                                  type="button"
-                                  class="rw-btn-product"
-                                >
-                                  <span class="counter">1</span>
-                                </button>
-                                <button
-                                  type="button"
-                                  class="rw-btn-product"
-                                >
-                                  <i class="fa-solid fa-minus"></i>
-                                </button>
-                              </div>
-                              <div class="product-quantity">
-                                <span class="quantity">1</span>
-                                <i class="fa-solid fa-xmark"></i>
-                                <span class="price">$273.00</span>
-                              </div>
-                              <button type="button" class="close-btn">
-                                <i class="fa-solid fa-xmark"></i>
-                              </button>
-                            </div>
-                          </div>
-                        </div>
-                      </div>
-                      <div class="card">
-                        <div class="row g-0">
-                          <div class="col-3 pt-3">
-                            <img
-                              src="assets/images/retail-product-6-opt-330x340.jpg"
-                              class="img-fluid"
-                              alt="Product"
-                            />
-                          </div>
-                          <div class="col-9">
-                            <div class="card-body">
-                              <h6 class="card-title">Red Sneakers</h6>
-                              <div
-                                class="btn-group mb-2"
-                                role="group"
-                                aria-label="Product Button Group"
-                              >
-                                <button
-                                  type="button"
-                                  class="rw-btn-product"
-                                >
-                                  <i class="fa-solid fa-plus"></i>
-                                </button>
-                                <button
-                                  type="button"
-                                  class="rw-btn-product"
-                                >
-                                  <span class="counter">1</span>
-                                </button>
-                                <button
-                                  type="button"
-                                  class="rw-btn-product"
-                                >
-                                  <i class="fa-solid fa-minus"></i>
-                                </button>
-                              </div>
-                              <div class="product-quantity">
-                                <span class="quantity">1</span>
-                                <i class="fa-solid fa-xmark"></i>
-                                <span class="price">$273.00</span>
-                              </div>
-                              <button type="button" class="close-btn">
-                                <i class="fa-solid fa-xmark"></i>
-                              </button>
-                            </div>
-                          </div>
-                        </div>
-                      </div>
+                      @endif
+                      @endforeach
                     </div>
                     <div class="cart-footer">
                       <div
@@ -941,6 +664,12 @@
                       </div>
                     </div>
                   </div>
+                  @else
+                      <div class="text-center p-3">
+                          <i class="las la-frown la-3x opacity-60 mb-3"></i>
+                          <h3 class="h6 fw-700">{{translate('Your Cart is empty')}}</h3>
+                      </div>
+                  @endif
                 </div>
               </li>
             </ul>
@@ -1022,143 +751,18 @@
             </ul>
           </li>
           <li class="nav-item rw-dropdown">
-            <a class="nav-link text-uppercase" href="#">
+            <a class="nav-link text-uppercase" href="{{ route('home') }}">
               <span>Home</span>
-              <i class="fas fa-angle-down text-muted"></i>
             </a>
-            <!-- Top Bar Dropdown / start -->
-            <ul class="rw-dropdown-menu">
-              <li>
-                <a class="rw-dropdown-item" href="#">Deutsch</a>
-              </li>
-              <li>
-                <a class="rw-dropdown-item" href="#">French</a>
-              </li>
-              <li>
-                <a class="rw-dropdown-item" href="#">Deutsch</a>
-              </li>
-              <li>
-                <a class="rw-dropdown-item" href="#">French</a>
-              </li>
-              <li>
-                <a class="rw-dropdown-item" href="#">Deutsch</a>
-              </li>
-              <li>
-                <a class="rw-dropdown-item" href="#">French</a>
-              </li>
-            </ul>
           </li>
           <li class="nav-item rw-dropdown">
-            <a class="nav-link text-uppercase" href="#">
-              <span>Shop</span>
-              <i class="fas fa-angle-down text-muted"></i>
+            <a class="nav-link text-uppercase" href="{{ route('home') }}">
+              <span>Best Selling</span>
             </a>
-            <!-- Top Bar Dropdown / start -->
-            <ul class="rw-dropdown-menu">
-              <li>
-                <a class="rw-dropdown-item" href="#">Deutsch</a>
-              </li>
-              <li>
-                <a class="rw-dropdown-item" href="#">French</a>
-              </li>
-              <li>
-                <a class="rw-dropdown-item" href="#">Deutsch</a>
-              </li>
-              <li>
-                <a class="rw-dropdown-item" href="#">French</a>
-              </li>
-              <li>
-                <a class="rw-dropdown-item" href="#">Deutsch</a>
-              </li>
-              <li>
-                <a class="rw-dropdown-item" href="#">French</a>
-              </li>
-            </ul>
           </li>
           <li class="nav-item rw-dropdown">
-            <a class="nav-link text-uppercase" href="#">
-              <span>Blog</span>
-              <i class="fas fa-angle-down text-muted"></i>
-            </a>
-            <!-- Top Bar Dropdown / start -->
-            <ul class="rw-dropdown-menu">
-              <li>
-                <a class="rw-dropdown-item" href="#">Deutsch</a>
-              </li>
-              <li>
-                <a class="rw-dropdown-item" href="#">French</a>
-              </li>
-              <li>
-                <a class="rw-dropdown-item" href="#">Deutsch</a>
-              </li>
-              <li>
-                <a class="rw-dropdown-item" href="#">French</a>
-              </li>
-              <li>
-                <a class="rw-dropdown-item" href="#">Deutsch</a>
-              </li>
-              <li>
-                <a class="rw-dropdown-item" href="#">French</a>
-              </li>
-            </ul>
-          </li>
-          <li class="nav-item rw-dropdown">
-            <a class="nav-link text-uppercase" href="#">
-              <span>Pages</span>
-              <i class="fas fa-angle-down text-muted"></i>
-            </a>
-            <!-- Top Bar Dropdown / start -->
-            <ul class="rw-dropdown-menu">
-              <li>
-                <a class="rw-dropdown-item" href="#">Deutsch</a>
-              </li>
-              <li>
-                <a class="rw-dropdown-item" href="#">French</a>
-              </li>
-              <li>
-                <a class="rw-dropdown-item" href="#">Deutsch</a>
-              </li>
-              <li>
-                <a class="rw-dropdown-item" href="#">French</a>
-              </li>
-              <li>
-                <a class="rw-dropdown-item" href="#">Deutsch</a>
-              </li>
-              <li>
-                <a class="rw-dropdown-item" href="#">French</a>
-              </li>
-            </ul>
-          </li>
-          <li class="nav-item rw-dropdown">
-            <a class="nav-link text-uppercase" href="#">
-              <span>Elements</span>
-              <i class="fas fa-angle-down text-muted"></i>
-            </a>
-            <!-- Top Bar Dropdown / start -->
-            <ul class="rw-dropdown-menu">
-              <li>
-                <a class="rw-dropdown-item" href="#">Deutsch</a>
-              </li>
-              <li>
-                <a class="rw-dropdown-item" href="#">French</a>
-              </li>
-              <li>
-                <a class="rw-dropdown-item" href="#">Deutsch</a>
-              </li>
-              <li>
-                <a class="rw-dropdown-item" href="#">French</a>
-              </li>
-              <li>
-                <a class="rw-dropdown-item" href="#">Deutsch</a>
-              </li>
-              <li>
-                <a class="rw-dropdown-item" href="#">French</a>
-              </li>
-            </ul>
-          </li>
-          <li class="nav-item rw-dropdown">
-            <a class="nav-link text-uppercase" href="#">
-              <span>Any</span>
+            <a class="nav-link text-uppercase" href="{{ route('home') }}">
+              <span>Flash Sale</span>
             </a>
           </li>
         </ul>

@@ -464,6 +464,7 @@
     </div>
 
     <!-- Bootstrap JavaScript Libraries -->
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js" integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4=" crossorigin="anonymous"></script>
     <script src="{{ static_asset('frontend/assets/modules/bootstrap/js/bootstrap.bundle.min.js') }}"></script>
 
     <!-- Tiny Slider Library -->
@@ -472,6 +473,151 @@
 
     <!-- Custom JS -->
     <script src="{{ static_asset('frontend/assets/js/index.js') }}"></script>
-    <script src="{{ static_asset('frontend/assets/js/home.js') }}"></script>
+    <script src="{{ static_asset('frontend/assets/js/home.js') }}"></script>  
+    <script> 
+        function addToCompare(id){ 
+          $.ajax({ 
+                headers: {
+                  'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                },
+                type:"POST",
+                url: '{{ route('compare.addToCompare') }}', 
+                success: function(data){
+                  if(data == 1){
+                  let timerInterval
+                    Swal.fire({
+                      title: 'Item adding to your compare', 
+                      timer: 2000,
+                      timerProgressBar: true,
+                      didOpen: () => {
+                        Swal.showLoading()
+                        const b = Swal.getHtmlContainer().querySelector('b')
+                        timerInterval = setInterval(() => {
+                          b.textContent = Swal.getTimerLeft()
+                        }, 100)
+                      },
+                      willClose: () => {
+                        clearInterval(timerInterval)
+                      }
+                    }).then((result) => {
+                      /* Read more about handling dismissals below */
+                      if (result.dismiss === Swal.DismissReason.timer) {
+                        console.log('I was closed by the timer')
+                      }
+                    })
+                }
+                },
+                error: function() {
+                  alert('compare error')
+                }
+            });
+        }
+    </script>
+
+    <script>
+      
+      function addToCart(id){ 
+        $.ajax({
+          headers: {
+              'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+            },
+              type:"POST",
+              url: '{{ route('cart.addToCart') }}',
+              data: {id : id},
+              success: function(data){ 
+                if(data == 1){
+                  let timerInterval
+                    Swal.fire({
+                      title: 'Item adding to your cart', 
+                      timer: 2000,
+                      timerProgressBar: true,
+                      didOpen: () => {
+                        Swal.showLoading()
+                        const b = Swal.getHtmlContainer().querySelector('b')
+                        timerInterval = setInterval(() => {
+                          b.textContent = Swal.getTimerLeft()
+                        }, 100)
+                      },
+                      willClose: () => {
+                        clearInterval(timerInterval)
+                      }
+                    }).then((result) => {
+                      /* Read more about handling dismissals below */
+                      if (result.dismiss === Swal.DismissReason.timer) {
+                        console.log('I was closed by the timer')
+                      }
+                    })
+                }else if(data == 0){
+                  let timerInterval
+                    Swal.fire({
+                      title: 'Something went wrong', 
+                      timer: 2000,
+                      timerProgressBar: true,
+                      didOpen: () => {
+                        Swal.showLoading()
+                        const b = Swal.getHtmlContainer().querySelector('b')
+                        timerInterval = setInterval(() => {
+                          b.textContent = Swal.getTimerLeft()
+                        }, 100)
+                      },
+                      willClose: () => {
+                        clearInterval(timerInterval)
+                      }
+                    }).then((result) => {
+                      /* Read more about handling dismissals below */
+                      if (result.dismiss === Swal.DismissReason.timer) {
+                        console.log('I was closed by the timer')
+                      }
+                    })
+                }else if(data == 2){
+                  let timerInterval
+                    Swal.fire({
+                      title: 'Already added in cart', 
+                      timer: 2000,
+                      timerProgressBar: true,
+                      didOpen: () => {
+                        Swal.showLoading()
+                        const b = Swal.getHtmlContainer().querySelector('b')
+                        timerInterval = setInterval(() => {
+                          b.textContent = Swal.getTimerLeft()
+                        }, 100)
+                      },
+                      willClose: () => {
+                        clearInterval(timerInterval)
+                      }
+                    }).then((result) => {
+                      /* Read more about handling dismissals below */
+                      if (result.dismiss === Swal.DismissReason.timer) {
+                        console.log('I was closed by the timer')
+                      }
+                    })
+                }
+                
+                  countCarts()
+              },
+              error: function() {
+                alert('error')
+              }
+          });
+        }
+        function countCarts(){ 
+          $.ajax({ 
+                headers: {
+                  'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                },
+                type:"get",
+                url: '{{ route('cart.countCarts') }}', 
+                success: function(data){
+                  $('#countCarts').html(data); 
+                },
+                error: function() {
+                  alert('error')
+                }
+            });
+        }
+    </script>  
+     @php
+        echo get_setting('footer_script');
+    @endphp
   </body>
 </html>

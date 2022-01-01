@@ -104,23 +104,15 @@
                           </a>
                           <div class="product-options">
                             <a
-                              href="#"
+                              href="javascript:void(0)" 
+                              onclick="addToCart({{ $item->id }})"
                               class="text-decoration-none"
                               title="Add to Cart"
                             >
                               <i
                                 class="fa-solid fa-cart-shopping fa-lg"
                               ></i>
-                            </a>
-                            <a
-                              href="#"
-                              class="text-decoration-none"
-                              title="Search"
-                            >
-                              <i
-                                class="fa-solid fa-magnifying-glass fa-lg"
-                              ></i>
-                            </a>
+                            </a> 
                             <a
                               href="#"
                               class="text-decoration-none"
@@ -144,9 +136,13 @@
                             </a>
                           </h6>
                           <div class="tags"> 
+                            <div class="rating rating-sm mt-1">
+                                {{ renderStarRating($item->rating) }}
+                            </div>
                           </div>
                           <div class="price">
-                            <span class="price-text">{{ $item->unit_price }}</span> 
+                            <span class="price-text">{{ home_discounted_base_price($item) }}</span> 
+                            <del class="fw-600 opacity-50 mr-1">{{ home_base_price($item) }}</del>
                           </div>
                         </div>
                       </div>
@@ -205,7 +201,7 @@
         <div class="container">
           <div class="specific-products-wrapper">
             <div class="sec-heading">
-              <h2 class="heading text-uppercase">FEATURED PRODUCTS</h2>
+              <h2 class="heading text-uppercase">Best Selling</h2>
               <div class="carousel-controls manageControls2 ms-auto">
                 <button type="button" class="prev">
                   <i class="fa-solid fa-chevron-left"></i>
@@ -232,23 +228,15 @@
                           </a>
                           <div class="product-options">
                             <a
-                              href="#"
+                              href="javascript:void(0)" 
+                              onclick="addToCart({{ $item->id }})"
                               class="text-decoration-none"
                               title="Add to Cart"
                             >
                               <i
                                 class="fa-solid fa-cart-shopping fa-lg"
                               ></i>
-                            </a>
-                            <a
-                              href="#"
-                              class="text-decoration-none"
-                              title="Search"
-                            >
-                              <i
-                                class="fa-solid fa-magnifying-glass fa-lg"
-                              ></i>
-                            </a>
+                            </a> 
                             <a
                               href="#"
                               class="text-decoration-none"
@@ -271,13 +259,98 @@
                               {{  $item->getTranslation('name')  }}
                             </a>
                           </h6>
-                          <div class="tags">
-                            <a href="#" class="tag text-decoration-none"
-                              >Retail</a
-                            >
+                          <div class="tags"> 
+                            <div class="rating rating-sm mt-1">
+                                {{ renderStarRating($item->rating) }}
+                            </div>
                           </div>
                           <div class="price">
-                            <span class="price-text">${{ $item->unit_price  }}</span>
+                            <span class="price-text">{{ home_discounted_base_price($item) }}</span> 
+                            <del class="fw-600 opacity-50 mr-1">{{ home_base_price($item) }}</del>
+                          </div>
+                        </div>
+                      </div>
+                    </li>
+                    @endforeach
+                    
+                  </ul> 
+               
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="specific-product mb-4">
+        <div class="container">
+          <div class="specific-products-wrapper">
+            <div class="sec-heading">
+              <h2 class="heading text-uppercase">Now Trending
+              </h2>
+              <div class="carousel-controls manageControls3 ms-auto">
+                <button type="button" class="prev">
+                  <i class="fa-solid fa-chevron-left"></i>
+                </button>
+                <button type="button" class="next">
+                  <i class="fa-solid fa-chevron-right"></i>
+                </button>
+              </div>
+            </div>
+            <div class="products-wrapper">
+              
+                  <ul class="products products3">
+                    @foreach ($featured_products as $item)
+                    <li class="product">
+                      <div class="product-inner">
+                        <div class="product-thumbnail">
+                          <a href="#" class="text-decoration-none d-block">
+                            <figure class="product-img">
+                              <img
+                                src="{{ uploaded_asset($item->thumbnail_img) }}"
+                                alt="Product"
+                              />
+                            </figure>
+                          </a>
+                          <div class="product-options">
+                            <a
+                              href="javascript:void(0)" 
+                              onclick="addToCart({{ $item->id }})"
+                              class="text-decoration-none"
+                              title="Add to Cart"
+                            >
+                              <i
+                                class="fa-solid fa-cart-shopping fa-lg"
+                              ></i>
+                            </a> 
+                            <a
+                              href="#"
+                              class="text-decoration-none"
+                              title="Compare"
+                            >
+                              <i class="fa-solid fa-code-compare fa-lg"></i>
+                            </a>
+                            <a
+                              href="#"
+                              class="text-decoration-none"
+                              title="Favourite"
+                            >
+                              <i class="fa-regular fa-heart fa-lg"></i>
+                            </a>
+                          </div>
+                        </div>
+                        <div class="product-content">
+                          <h6 class="product-name text-capitalize">
+                            <a href="{{ route('product', $item->slug) }}" class="text-decoration-none">
+                              {{  $item->getTranslation('name')  }}
+                            </a>
+                          </h6>
+                          <div class="tags"> 
+                            <div class="rating rating-sm mt-1">
+                                {{ renderStarRating($item->rating) }}
+                            </div>
+                          </div>
+                          <div class="price">
+                            <span class="price-text">{{ home_discounted_base_price($item) }}</span> 
+                            <del class="fw-600 opacity-50 mr-1">{{ home_base_price($item) }}</del>
                           </div>
                         </div>
                       </div>

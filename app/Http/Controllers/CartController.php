@@ -49,18 +49,17 @@ class CartController extends Controller
     {
         $product = Product::find($request->id);
         return view('auction.frontend.addToCartAuction', compact('product'));
-    }
+    } 
 
-    public function addToCart(Request $request)
-    {
+    public function addToCart(Request $request) 
+    { 
         $product = Product::find($request->id);
-        $carts = array();
+        $carts = Cart::where('product_id', $product->id)->first();
         $data = array();
-
+        
         if(auth()->user() != null) {
             $user_id = Auth::user()->id;
             $data['user_id'] = $user_id;
-            $carts = Cart::where('user_id', $user_id)->get();
         } else {
             if($request->session()->get('temp_user_id')) {
                 $temp_user_id = $request->session()->get('temp_user_id');
@@ -69,213 +68,300 @@ class CartController extends Controller
                 $request->session()->put('temp_user_id', $temp_user_id);
             }
             $data['temp_user_id'] = $temp_user_id;
+        } 
+
+        if(auth()->user() != null) {
+            $user_id = Auth::user()->id;
+            $carts = Cart::where('user_id', $user_id)->get();
+            foreach ($carts as $key => $value) {
+                if ( $value->product_id == $product->id ) {
+                    return 2;
+                }
+            }
+        } else if($request->session()->get('temp_user_id')){
+            $temp_user_id = $request->session()->get('temp_user_id');
             $carts = Cart::where('temp_user_id', $temp_user_id)->get();
+            foreach ($carts as $key => $value) {
+                if ( $value->product_id == $product->id ) {
+                    return 2;
+                }
+            }
         }
+        
 
         $data['product_id'] = $product->id;
         $data['owner_id'] = $product->user_id;
 
-        $str = '';
-        $tax = 0;
-        if($product->auction_product == 0){
-            if($product->digital != 1 && $request->quantity < $product->min_qty) {
-                return array(
-                    'status' => 0,
-                    'cart_count' => count($carts),
-                    'modal_view' => view('frontend.partials.minQtyNotSatisfied', [ 'min_qty' => $product->min_qty ])->render(),
-                    'nav_cart_view' => view('frontend.partials.cart')->render(),
-                );
-            }
+        $price = $product->unit_price ;
 
-            //check the color enabled or disabled for the product
-            if($request->has('color')) {
-                $str = $request['color'];
-            }
+        
+         //discount calculation
+         $discount_applicable = false;
 
-            if ($product->digital != 1) {
-                //Gets all the choice values of customer choice option and generate a string like Black-S-Cotton
-                foreach (json_decode(Product::find($request->id)->choice_options) as $key => $choice) {
-                    if($str != null){
-                        $str .= '-'.str_replace(' ', '', $request['attribute_id_'.$choice->attribute_id]);
-                    }
-                    else{
-                        $str .= str_replace(' ', '', $request['attribute_id_'.$choice->attribute_id]);
-                    }
-                }
-            }
+         if ($product->discount_start_date == null) {
+             $discount_applicable = true;
+         }
+         elseif (strtotime(date('d-m-Y H:i:s')) >= $product->discount_start_date &&
+             strtotime(date('d-m-Y H:i:s')) <= $product->discount_end_date) {
+             $discount_applicable = true;
+         }
 
-            $data['variation'] = $str;
+         if ($discount_applicable) {
+             if($product->discount_type == 'percent'){
+                 $price -= ($price*$product->discount)/100;
+             }
+             elseif($product->discount_type == 'amount'){
+                 $price -= $product->discount;
+             }
+         }
+          
+         
+         
+         $data['price'] = $price;
+         $data['tax'] = $product->tax;
+         $data['shipping_cost'] = $product->shipping_cost;
+         $data['shipping_type'] = $product->shipping_type;
+         $data['discount'] = $product->discount; 
+         $data['product_referral_code'] = null;
+         
+         if(Cookie::has('referred_product_id') && Cookie::get('referred_product_id') == $product->id) {
+            $data['product_referral_code'] = Cookie::get('product_referral_code');
+         } 
 
-            $product_stock = $product->stocks->where('variant', $str)->first();
-            $price = $product_stock->price;
-
-            if($product->wholesale_product){
-                $wholesalePrice = $product_stock->wholesalePrices->where('min_qty', '<=', $request->quantity)->where('max_qty', '>=', $request->quantity)->first();
-                if($wholesalePrice){
-                    $price = $wholesalePrice->price;
-                }
-            }
-
-            $quantity = $product_stock->qty;
-
-            if($quantity < $request['quantity']){
-                return array(
-                    'status' => 0,
-                    'cart_count' => count($carts),
-                    'modal_view' => view('frontend.partials.outOfStockCart')->render(),
-                    'nav_cart_view' => view('frontend.partials.cart')->render(),
-                );
-            }
-
-            //discount calculation
-            $discount_applicable = false;
-
-            if ($product->discount_start_date == null) {
-                $discount_applicable = true;
-            }
-            elseif (strtotime(date('d-m-Y H:i:s')) >= $product->discount_start_date &&
-                strtotime(date('d-m-Y H:i:s')) <= $product->discount_end_date) {
-                $discount_applicable = true;
-            }
-
-            if ($discount_applicable) {
-                if($product->discount_type == 'percent'){
-                    $price -= ($price*$product->discount)/100;
-                }
-                elseif($product->discount_type == 'amount'){
-                    $price -= $product->discount;
-                }
-            }
-
-            //calculation of taxes
-            foreach ($product->taxes as $product_tax) {
-                if($product_tax->tax_type == 'percent'){
-                    $tax += ($price * $product_tax->tax) / 100;
-                }
-                elseif($product_tax->tax_type == 'amount'){
-                    $tax += $product_tax->tax;
-                }
-            }
-
-            $data['quantity'] = $request['quantity'];
-            $data['price'] = $price;
-            $data['tax'] = $tax;
-            //$data['shipping'] = 0;
-            $data['shipping_cost'] = 0;
-            $data['product_referral_code'] = null;
-            $data['cash_on_delivery'] = $product->cash_on_delivery;
-            $data['digital'] = $product->digital;
-
-            if ($request['quantity'] == null){
-                $data['quantity'] = 1;
-            }
-
-            if(Cookie::has('referred_product_id') && Cookie::get('referred_product_id') == $product->id) {
-                $data['product_referral_code'] = Cookie::get('product_referral_code');
-            }
-
-            if($carts && count($carts) > 0){
-                $foundInCart = false;
-
-                foreach ($carts as $key => $cartItem){
-                    $product = Product::where('id', $cartItem['product_id'])->first();
-                    if($product->auction_product == 1){
-                        return array(
-                            'status' => 0,
-                            'cart_count' => count($carts),
-                            'modal_view' => view('frontend.partials.auctionProductAlredayAddedCart')->render(),
-                            'nav_cart_view' => view('frontend.partials.cart')->render(),
-                        );
-                    }
-
-                    if($cartItem['product_id'] == $request->id) {
-                        $product_stock = $product->stocks->where('variant', $str)->first();
-                        $quantity = $product_stock->qty;
-                        if($quantity < $cartItem['quantity'] + $request['quantity']){
-                            return array(
-                                'status' => 0,
-                                'cart_count' => count($carts),
-                                'modal_view' => view('frontend.partials.outOfStockCart')->render(),
-                                'nav_cart_view' => view('frontend.partials.cart')->render(),
-                            );
-                        }
-                        if(($str != null && $cartItem['variation'] == $str) || $str == null){
-                            $foundInCart = true;
-
-                            $cartItem['quantity'] += $request['quantity'];
-
-                            if($product->wholesale_product){
-                                $wholesalePrice = $product_stock->wholesalePrices->where('min_qty', '<=', $request->quantity)->where('max_qty', '>=', $request->quantity)->first();
-                                if($wholesalePrice){
-                                    $price = $wholesalePrice->price;
-                                }
-                            }
-
-                            $cartItem['price'] = $price;
-
-                            $cartItem->save();
-                        }
-                    }
-                }
-                if (!$foundInCart) {
-                    Cart::create($data);
-                }
-            }
-            else{
-                Cart::create($data);
-            }
-
-            if(auth()->user() != null) {
-                $user_id = Auth::user()->id;
-                $carts = Cart::where('user_id', $user_id)->get();
-            } else {
-                $temp_user_id = $request->session()->get('temp_user_id');
-                $carts = Cart::where('temp_user_id', $temp_user_id)->get();
-            }
-            return array(
-                'status' => 1,
-                'cart_count' => count($carts),
-                'modal_view' => view('frontend.partials.addedToCart', compact('product', 'data'))->render(),
-                'nav_cart_view' => view('frontend.partials.cart')->render(),
-            );
-        }
-        else{
-            $price = $product->bids->max('amount');
-
-            foreach ($product->taxes as $product_tax) {
-                if($product_tax->tax_type == 'percent'){
-                    $tax += ($price * $product_tax->tax) / 100;
-                }
-                elseif($product_tax->tax_type == 'amount'){
-                    $tax += $product_tax->tax;
-                }
-            }
-
+         if ($request['quantity'] == null){
             $data['quantity'] = 1;
-            $data['price'] = $price;
-            $data['tax'] = $tax;
-            $data['shipping_cost'] = 0;
-            $data['product_referral_code'] = null;
-            $data['cash_on_delivery'] = $product->cash_on_delivery;
-            $data['digital'] = $product->digital;
-
-            if(count($carts) == 0){
-                Cart::create($data);
-            }
-            if(auth()->user() != null) {
-                $user_id = Auth::user()->id;
-                $carts = Cart::where('user_id', $user_id)->get();
-            } else {
-                $temp_user_id = $request->session()->get('temp_user_id');
-                $carts = Cart::where('temp_user_id', $temp_user_id)->get();
-            }
-            return array(
-                'status' => 1,
-                'cart_count' => count($carts),
-                'modal_view' => view('frontend.partials.addedToCart', compact('product', 'data'))->render(),
-                'nav_cart_view' => view('frontend.partials.cart')->render(),
-            );
+        }else{
+            $data['quantity'] = $request['quantity'];
         }
+
+  
+        if(Cart::create($data)){
+            return 1;
+        }else{
+            return 0;
+        }
+ 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+        // $str = '';
+        // $tax = 0;
+        // if($product->auction_product == 0){
+        //     if($product->digital != 1 && $request->quantity < $product->min_qty) {
+        //         return array(
+        //             'status' => 0,
+        //             'cart_count' => count($carts),
+        //             'modal_view' => view('frontend.partials.minQtyNotSatisfied', [ 'min_qty' => $product->min_qty ])->render(),
+        //             'nav_cart_view' => view('frontend.partials.cart')->render(),
+        //         );
+        //     }
+
+        //     //check the color enabled or disabled for the product
+        //     if($request->has('color')) {
+        //         $str = $request['color'];
+        //     }
+
+        //     if ($product->digital != 1) {
+        //         //Gets all the choice values of customer choice option and generate a string like Black-S-Cotton
+        //         foreach (json_decode(Product::find($request->id)->choice_options) as $key => $choice) {
+        //             if($str != null){
+        //                 $str .= '-'.str_replace(' ', '', $request['attribute_id_'.$choice->attribute_id]);
+        //             }
+        //             else{
+        //                 $str .= str_replace(' ', '', $request['attribute_id_'.$choice->attribute_id]);
+        //             }
+        //         }
+        //     }
+
+        //     $data['variation'] = $str;
+
+        //     $product_stock = $product->stocks->where('variant', $str)->first();
+        //     $price = $product_stock->price;
+
+        //     if($product->wholesale_product){
+        //         $wholesalePrice = $product_stock->wholesalePrices->where('min_qty', '<=', $request->quantity)->where('max_qty', '>=', $request->quantity)->first();
+        //         if($wholesalePrice){
+        //             $price = $wholesalePrice->price;
+        //         }
+        //     }
+
+        //     $quantity = $product_stock->qty;
+
+        //     if($quantity < $request['quantity']){
+        //         return array(
+        //             'status' => 0,
+        //             'cart_count' => count($carts),
+        //             'modal_view' => view('frontend.partials.outOfStockCart')->render(),
+        //             'nav_cart_view' => view('frontend.partials.cart')->render(),
+        //         );
+        //     }
+
+        //     //discount calculation
+        //     $discount_applicable = false;
+
+        //     if ($product->discount_start_date == null) {
+        //         $discount_applicable = true;
+        //     }
+        //     elseif (strtotime(date('d-m-Y H:i:s')) >= $product->discount_start_date &&
+        //         strtotime(date('d-m-Y H:i:s')) <= $product->discount_end_date) {
+        //         $discount_applicable = true;
+        //     }
+
+        //     if ($discount_applicable) {
+        //         if($product->discount_type == 'percent'){
+        //             $price -= ($price*$product->discount)/100;
+        //         }
+        //         elseif($product->discount_type == 'amount'){
+        //             $price -= $product->discount;
+        //         }
+        //     }
+
+        //     //calculation of taxes
+        //     foreach ($product->taxes as $product_tax) {
+        //         if($product_tax->tax_type == 'percent'){
+        //             $tax += ($price * $product_tax->tax) / 100;
+        //         }
+        //         elseif($product_tax->tax_type == 'amount'){
+        //             $tax += $product_tax->tax;
+        //         }
+        //     }
+
+        //     $data['quantity'] = $request['quantity'];
+        //     $data['price'] = $price;
+        //     $data['tax'] = $tax;
+        //     //$data['shipping'] = 0;
+        //     $data['shipping_cost'] = 0;
+        //     $data['product_referral_code'] = null;
+        //     $data['cash_on_delivery'] = $product->cash_on_delivery;
+        //     $data['digital'] = $product->digital;
+
+        //     if ($request['quantity'] == null){
+        //         $data['quantity'] = 1;
+        //     }
+
+        //     if(Cookie::has('referred_product_id') && Cookie::get('referred_product_id') == $product->id) {
+        //         $data['product_referral_code'] = Cookie::get('product_referral_code');
+        //     }
+
+        //     if($carts && count($carts) > 0){
+        //         $foundInCart = false;
+
+        //         foreach ($carts as $key => $cartItem){
+        //             $product = Product::where('id', $cartItem['product_id'])->first();
+        //             if($product->auction_product == 1){
+        //                 return array(
+        //                     'status' => 0,
+        //                     'cart_count' => count($carts),
+        //                     'modal_view' => view('frontend.partials.auctionProductAlredayAddedCart')->render(),
+        //                     'nav_cart_view' => view('frontend.partials.cart')->render(),
+        //                 );
+        //             }
+
+        //             if($cartItem['product_id'] == $request->id) {
+        //                 $product_stock = $product->stocks->where('variant', $str)->first();
+        //                 $quantity = $product_stock->qty;
+        //                 if($quantity < $cartItem['quantity'] + $request['quantity']){
+        //                     return array(
+        //                         'status' => 0,
+        //                         'cart_count' => count($carts),
+        //                         'modal_view' => view('frontend.partials.outOfStockCart')->render(),
+        //                         'nav_cart_view' => view('frontend.partials.cart')->render(),
+        //                     );
+        //                 }
+        //                 if(($str != null && $cartItem['variation'] == $str) || $str == null){
+        //                     $foundInCart = true;
+
+        //                     $cartItem['quantity'] += $request['quantity'];
+
+        //                     if($product->wholesale_product){
+        //                         $wholesalePrice = $product_stock->wholesalePrices->where('min_qty', '<=', $request->quantity)->where('max_qty', '>=', $request->quantity)->first();
+        //                         if($wholesalePrice){
+        //                             $price = $wholesalePrice->price;
+        //                         }
+        //                     }
+
+        //                     $cartItem['price'] = $price;
+
+        //                     $cartItem->save();
+        //                 }
+        //             }
+        //         }
+        //         if (!$foundInCart) {
+        //             Cart::create($data);
+        //         }
+        //     }
+        //     else{
+        //         Cart::create($data);
+        //     }
+
+        //     if(auth()->user() != null) {
+        //         $user_id = Auth::user()->id;
+        //         $carts = Cart::where('user_id', $user_id)->get();
+        //     } else {
+        //         $temp_user_id = $request->session()->get('temp_user_id');
+        //         $carts = Cart::where('temp_user_id', $temp_user_id)->get();
+        //     }
+        //     return array(
+        //         'status' => 1,
+        //         'cart_count' => count($carts),
+        //         'modal_view' => view('frontend.partials.addedToCart', compact('product', 'data'))->render(),
+        //         'nav_cart_view' => view('frontend.partials.cart')->render(),
+        //     );
+        // }
+        // else{
+        //     $price = $product->bids->max('amount');
+
+        //     foreach ($product->taxes as $product_tax) {
+        //         if($product_tax->tax_type == 'percent'){
+        //             $tax += ($price * $product_tax->tax) / 100;
+        //         }
+        //         elseif($product_tax->tax_type == 'amount'){
+        //             $tax += $product_tax->tax;
+        //         }
+        //     }
+
+        //     $data['quantity'] = 1;
+        //     $data['price'] = $price;
+        //     $data['tax'] = $tax;
+        //     $data['shipping_cost'] = 0;
+        //     $data['product_referral_code'] = null;
+        //     $data['cash_on_delivery'] = $product->cash_on_delivery;
+        //     $data['digital'] = $product->digital;
+
+        //     if(count($carts) == 0){
+        //         Cart::create($data);
+        //     }
+        //     if(auth()->user() != null) {
+        //         $user_id = Auth::user()->id;
+        //         $carts = Cart::where('user_id', $user_id)->get();
+        //     } else {
+        //         $temp_user_id = $request->session()->get('temp_user_id');
+        //         $carts = Cart::where('temp_user_id', $temp_user_id)->get();
+        //     }
+        //     return array(
+        //         'status' => 1,
+        //         'cart_count' => count($carts),
+        //         'modal_view' => view('frontend.partials.addedToCart', compact('product', 'data'))->render(),
+        //         'nav_cart_view' => view('frontend.partials.cart')->render(),
+        //     );
+        // }
     }
 
     //removes from Cart
@@ -337,5 +423,17 @@ class CartController extends Controller
             'cart_view' => view('frontend.partials.cart_details', compact('carts'))->render(),
             'nav_cart_view' => view('frontend.partials.cart')->render(),
         );
+    }
+    function countCarts(){
+        if(auth()->user() != null) {
+            $user_id = Auth::user()->id;
+            $cart = Cart::where('user_id', $user_id)->get();
+        } else {
+            $temp_user_id = Session()->get('temp_user_id');
+            if($temp_user_id) {
+                $cart = Cart::where('temp_user_id', $temp_user_id)->get();
+            }
+        }
+        return count($cart);
     }
 }
