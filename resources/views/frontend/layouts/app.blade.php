@@ -27,6 +27,9 @@
     
     <!-- Custom CSS -->
     <link rel="stylesheet" href="{{ static_asset('frontend/assets/css/style.min.css') }}" />
+    
+    <link rel="stylesheet" href="{{ static_asset('assets/css/custom-style.css') }}">
+    <link rel="stylesheet" href="{{ static_asset('assets/css/aiz-core.css') }}">
     <script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
   </head>
   <body>

@@ -383,138 +383,54 @@ if(auth()->user() != null) {
           </div>
           <div class="header-right">
             <ul class="nav right">
+              @if(!Auth::user())
               <li class="nav-item d-none d-lg-inline-block">
                 <a
-                  class="nav-link text-uppercase"
-                  data-bs-toggle="offcanvas"
-                  href="#logReg"
-                  role="button"
-                  aria-controls="logReg"
+                  class="nav-link text-uppercase" 
+                  href="{{ route('user.login') }}" 
                 >
+                
                   <span>Login / Register</span>
-                </a>
-                <div
-                  class="offcanvas offcanvas-end"
-                  tabindex="-1"
-                  id="logReg"
-                  aria-labelledby="offcanvasLogReg"
-                >
-                  <div class="offcanvas-header">
-                    <h5 class="text-uppercase" id="offcanvasRightLabel">
-                      Sign In
-                    </h5>
-                    <button
-                      type="button"
-                      class="close-btn"
-                      data-bs-dismiss="offcanvas"
-                      aria-label="Close"
-                    >
-                      <i class="fa-solid fa-xmark"></i>
-                      <span class="close-text">Close</span>
-                    </button>
-                  </div>
-                  <div class="offcanvas-body p-0">
-                    <div class="login-header">
-                      <form action="#" method="post">
-                        <div class="mb-3">
-                          <label for="logRegEmail" class="form-label">
-                            Username or email address
-                            <span class="required">*</span>
-                          </label>
-                          <input
-                            type="email"
-                            class="form-control rounded-pill"
-                            id="logRegEmail"
-                          />
-                        </div>
-                        <div class="mb-3">
-                          <label for="logRegPassword" class="form-label">
-                            Password
-                            <span class="required">*</span></label
-                          >
-                          <input
-                            type="password"
-                            class="form-control rounded-pill"
-                            id="logRegPassword"
-                          />
-                        </div>
-                        <div class="mb-3">
-                          <input
-                            type="submit"
-                            class="rw-btn rounded-pill text-uppercase"
-                            id="logRegSubmit"
-                            value="Log In"
-                          />
-                        </div>
-                        <div class="mb-3 d-flex justify-content-between">
-                          <div class="form-check">
-                            <input
-                              class="form-check-input"
-                              type="checkbox"
-                              value=""
-                              id="rememberMe"
-                            />
-                            <label
-                              class="form-check-label"
-                              for="rememberMe"
-                            >
-                              Remember me
-                            </label>
-                          </div>
-                          <div class="mb-3">
-                            <a href="#" class="lost-password">
-                              Lost your password?
-                            </a>
-                          </div>
-                        </div>
-                      </form>
-                    </div>
-                    <div class="login-regi-footer">
-                      <div class="login-options">
-                        <span class="text-uppercase"> or login with </span>
-                      </div>
-                      <div class="social-logins">
-                        <a
-                          href="#"
-                          target="_blank"
-                          type="button"
-                          class="rw-btn text-uppercase rounded-pill text-decoration-none position-relative"
-                        >
-                          <i class="fa-brands fa-facebook-square"></i>
-                          <span class="rw-btn-text">Facebook</span>
-                        </a>
-                        <a
-                          href="#"
-                          target="_blank"
-                          type="button"
-                          class="rw-btn text-uppercase rounded-pill text-decoration-none position-relative"
-                        >
-                          <img
-                            class="fa-brands google-icon"
-                            src="assets/images/google-btn-icon.svg"
-                            alt="google button"
-                          />
-                          <span class="rw-btn-text">Google</span>
-                        </a>
-                      </div>
-                      <div class="signup-user">
-                        <i class="fa-regular fa-circle-user fa-6x"></i>
-                        <span class="my-2">No account yet?</span>
-                        <a
-                          href="#"
-                          target="_blank"
-                          class="create-acc text-uppercase"
-                        >
-                          Create an account
-                        </a>
-                      </div>
-                    </div>
-                  </div>
-                </div>
+                </a> 
               </li>
+              @endif
+              @auth
+              @if(isAdmin())
               <li class="nav-item d-none d-lg-inline-block">
-                <a class="nav-link text-uppercase">
-                  <i class="far fa-heart fa-lg"></i>
+                <a
+                  class="nav-link text-uppercase" 
+                  href="{{ route('admin.dashboard') }}" 
+                >
+                
+                  <span>My Panel</span>
+                </a> 
+              </li>
+              @else
+              <li class="nav-item d-none d-lg-inline-block">
+                <a
+                  class="nav-link text-uppercase" 
+                  href="{{ route('dashboard') }}" 
+                >
+                
+                  <span>My Panel</span>
+                </a> 
+              </li>
+              @endif
+              @endauth
+              <li class="nav-item d-none d-lg-inline-block">
+                <a class="nav-link text-uppercase" href="{{ route('wishlists.index') }}">
+                  <div class="badge-group position-relative d-inline-block">
+                    <i class="far fa-heart fa-lg"></i>
+                    <span
+                      class="position-absolute translate-middle badge rounded-pill bg-danger"
+                    >
+                    @if(Auth::check())
+                    {{ count(Auth::user()->wishlists)}}
+                    @else
+                        0
+                    @endif
+                    </span>
+                  </div>
                 </a>
               </li>
               <li class="nav-item d-none d-lg-inline-block">
@@ -525,11 +441,10 @@ if(auth()->user() != null) {
                       class="position-absolute translate-middle badge rounded-pill bg-danger"
                     >
                     @if(Session::has('compare'))
-                    {{ Session::get('compare') }}
+                    {{ count(Session::get('compare')) }}
                     @else
                         0
                     @endif
-                      <span class="visually-hidden">compare products</span>
                     </span>
                   </div>
                 </a>
@@ -594,14 +509,14 @@ if(auth()->user() != null) {
                         <div class="row g-0">
                           <div class="col-3 pt-3">
                             <img
-                              src="assets/images/retail-product-6-opt-330x340.jpg"
+                              src="{{ uploaded_asset($product->thumbnail_img) }}"
                               class="img-fluid"
                               alt="Product"
                             />
                           </div>
                           <div class="col-9">
                             <div class="card-body">
-                              <h6 class="card-title">Red Sneakers</h6>
+                              <h6 class="card-title">{{  $product->getTranslation('name')  }}</h6>
                               <div
                                 class="btn-group mb-2"
                                 role="group"
@@ -629,7 +544,7 @@ if(auth()->user() != null) {
                               <div class="product-quantity">
                                 <span class="quantity">1</span>
                                 <i class="fa-solid fa-xmark"></i>
-                                <span class="price">$273.00</span>
+                                <span class="price">{{ single_price($cartItem['price']) }}</span>
                               </div>
                               <button type="button" class="close-btn">
                                 <i class="fa-solid fa-xmark"></i>
@@ -646,13 +561,13 @@ if(auth()->user() != null) {
                         class="sub-total-price d-flex align-items-center justify-content-between"
                       >
                         <h6 class="text-uppercase m-0">Subtotal:</h6>
-                        <span class="price">$709.00</span>
+                        <span class="price">{{ single_price($total) }}</span>
                       </div>
                       <div class="cart-buttons">
                         <a
                           href="cart.html"
                           role="button"
-                          class="rw-btn text-uppercase d-block"
+                          class="rw-btn text-uppercase d-block d-none"
                           >view cart</a
                         >
                         <a

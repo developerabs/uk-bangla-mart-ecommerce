@@ -474,6 +474,7 @@
     <!-- Custom JS -->
     <script src="{{ static_asset('frontend/assets/js/index.js') }}"></script>
     <script src="{{ static_asset('frontend/assets/js/home.js') }}"></script>  
+    <script src="{{ static_asset('frontend/assets/js/my-account.js') }}"></script>  
     <script> 
         function addToCompare(id){ 
           $.ajax({ 
@@ -482,6 +483,7 @@
                 },
                 type:"POST",
                 url: '{{ route('compare.addToCompare') }}', 
+                data: {id : id},
                 success: function(data){
                   if(data == 1){
                   let timerInterval
@@ -505,10 +507,52 @@
                         console.log('I was closed by the timer')
                       }
                     })
+                    location.reload();
                 }
                 },
                 error: function() {
                   alert('compare error')
+                }
+            });
+        }
+    </script>
+    <script> 
+        function addToWishList(id){ 
+          $.ajax({ 
+                headers: {
+                  'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                },
+                type:"POST",
+                url: '{{ route('wishlists.store') }}', 
+                data: {id : id},
+                success: function(data){
+                  if(data == 1){
+                  let timerInterval
+                    Swal.fire({
+                      title: 'Item adding to your wishlist', 
+                      timer: 2000,
+                      timerProgressBar: true,
+                      didOpen: () => {
+                        Swal.showLoading()
+                        const b = Swal.getHtmlContainer().querySelector('b')
+                        timerInterval = setInterval(() => {
+                          b.textContent = Swal.getTimerLeft()
+                        }, 100)
+                      },
+                      willClose: () => {
+                        clearInterval(timerInterval)
+                      }
+                    }).then((result) => {
+                      /* Read more about handling dismissals below */
+                      if (result.dismiss === Swal.DismissReason.timer) {
+                        console.log('I was closed by the timer')
+                      }
+                    })
+                  location.reload();
+                }
+                },
+                error: function() {
+                  alert('wishlist error')
                 }
             });
         }
@@ -593,7 +637,8 @@
                     })
                 }
                 
-                  countCarts()
+                  countCarts();
+                  location.reload();
               },
               error: function() {
                 alert('error')

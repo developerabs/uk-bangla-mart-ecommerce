@@ -384,7 +384,7 @@
                           </div>
                           <div class="fadein-content">
                             <div class="product-option-icons">
-                              <a href="#" class="text-decoration-none">
+                              <a href="javascript:void(0)" onclick="addToWishList({{ $product->id }})" class="text-decoration-none">
                                 <i class="fa-regular fa-heart fa-lg"></i>
                               </a>
                               <a href="javascript:void(0)" onclick="addToCart({{ $product->id }})" class="text-decoration-none">

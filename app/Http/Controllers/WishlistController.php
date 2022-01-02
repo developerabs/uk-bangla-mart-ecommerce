@@ -46,7 +46,7 @@ class WishlistController extends Controller
                 $wishlist->product_id = $request->id;
                 $wishlist->save();
             }
-            return view('frontend.partials.wishlist');
+            return 1;
         }
         return 0;
     }
