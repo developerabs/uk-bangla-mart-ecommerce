@@ -77,7 +77,7 @@
                             <div class="mb-3">
                               <input
                                 type="submit"
-                                class="rw-btn form-control rounded-pill text-uppercase text-white"
+                                class="btn btn-success form-control rounded-pill text-uppercase text-white"
                                 id="loginSubmit"
                                 value="Log In"
                               />
@@ -194,7 +194,7 @@
                             <div class="mb-3">
                               <input
                                 type="submit"
-                                class="rw-btn form-control rounded-pill text-uppercase text-white"
+                                class="btn btn-success form-control rounded-pill text-uppercase text-white"
                                 id="RegSubmit"
                                 value="Register"
                               />

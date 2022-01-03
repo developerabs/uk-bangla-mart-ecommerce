@@ -660,9 +660,12 @@
                 }
             });
         }
-    </script>  
-     @php
-        echo get_setting('footer_script');
-    @endphp
-  </body>
-</html>
+    </script> 
+    <script type="text/javascript">
+      function removeFromWishlist(id){
+          $.post('{{ route('wishlists.remove') }}',{_token:'{{ csrf_token() }}', id:id}, function(data){
+              alert('success')
+          })
+      }
+  </script> 
+

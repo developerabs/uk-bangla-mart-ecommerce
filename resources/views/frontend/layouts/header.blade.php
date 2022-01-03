@@ -451,11 +451,8 @@ if(auth()->user() != null) {
               </li>
               <li class="nav-item">
                 <a
-                  class="nav-link text-uppercase"
-                  data-bs-toggle="offcanvas"
-                  href="#shoppingCart"
-                  role="button"
-                  aria-controls="shoppingCart"
+                  class="nav-link text-uppercase" 
+                  href="{{ route('cart') }}" 
                 >
                   <div
                     class="badge-group position-relative d-inline-block me-lg-2"
@@ -565,13 +562,13 @@ if(auth()->user() != null) {
                       </div>
                       <div class="cart-buttons">
                         <a
-                          href="cart.html"
+                          href="{{ route('cart') }}"
                           role="button"
-                          class="rw-btn text-uppercase d-block d-none"
+                          class="rw-btn text-uppercase d-block"
                           >view cart</a
                         >
                         <a
-                          href="#"
+                          href="{{ route('checkout.shipping_info') }}"
                           role="button"
                           class="rw-btn text-uppercase d-block"
                           >checkout</a
@@ -665,21 +662,15 @@ if(auth()->user() != null) {
               @endforeach 
             </ul>
           </li>
+          @if ( get_setting('header_menu_labels') !=  null )
+          @foreach (json_decode( get_setting('header_menu_labels'), true) as $key => $value)
           <li class="nav-item rw-dropdown">
-            <a class="nav-link text-uppercase" href="{{ route('home') }}">
-              <span>Home</span>
+            <a class="nav-link text-uppercase" href="{{ json_decode( get_setting('header_menu_links'), true)[$key] }}">
+              <span>{{ translate($value) }}</span>
             </a>
           </li>
-          <li class="nav-item rw-dropdown">
-            <a class="nav-link text-uppercase" href="{{ route('home') }}">
-              <span>Best Selling</span>
-            </a>
-          </li>
-          <li class="nav-item rw-dropdown">
-            <a class="nav-link text-uppercase" href="{{ route('home') }}">
-              <span>Flash Sale</span>
-            </a>
-          </li>
+          @endforeach
+          @endif
         </ul>
       </div>
     </nav>

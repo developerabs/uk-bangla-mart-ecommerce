@@ -380,7 +380,7 @@
      
 
       <!-- Blog Posts /start -->
-      <div class="blog-posts">
+      <div class="blog-posts d-none">
         <div class="container">
           <div class="sec-heading">
             <h2 class="heading text-uppercase">Our Blogs</h2>

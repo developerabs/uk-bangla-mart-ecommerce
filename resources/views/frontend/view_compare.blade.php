@@ -1,7 +1,8 @@
 @extends('frontend.layouts.app')
 
 @section('content')
-
+<!-- Main Content / start -->
+<main class="rw-my-account-section" style="background-color: rgb(240, 240, 240); padding-bottom:40px;"> 
 <section class="pt-4 mb-4">
     <div class="container text-center">
         <div class="row">
@@ -92,7 +93,7 @@
                                     <th scope="row"></th>
                                     @foreach (Session::get('compare') as $key => $item)
                                         <td class="text-center py-4">
-                                            <button type="button" class="btn btn-primary fw-600" onclick="showAddToCartModal({{ $item }})">
+                                            <button type="button" class="btn btn-primary fw-600" onclick="addToCart({{ $item }})">
                                                 {{ translate('Add to cart')}}
                                             </button>
                                         </td>
@@ -110,5 +111,6 @@
         </div>
     </div>
 </section>
+</main>
 
 @endsection
