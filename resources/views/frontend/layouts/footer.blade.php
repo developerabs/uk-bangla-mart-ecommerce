@@ -207,177 +207,44 @@
             <div class="row">
               <div class="col-lg-8">
                 <div class="row">
-                  <div class="col-6 col-md-3">
+                  <div class="col-6 col-md-6">
                     <ul class="nav flex-column">
-                      <li class="nav-item text-uppercase px-2">Our Stories</li>
-                      <li class="nav-item">
-                        <a href="#" class="nav-link text-capitalize"
-                          >New York</a
-                        >
+                      <li class="nav-item text-uppercase px-2">
+                        <a href="{{ route('home') }}">
+                          @if(get_setting('footer_logo') != null)
+                          <img
+                            class="logo mb-4"
+                            src="{{ uploaded_asset(get_setting('footer_logo')) }}"
+                            alt="Footer Logo"
+                          /> 
+                          @endif
+                        </a>
                       </li>
                       <li class="nav-item">
-                        <a href="#" class="nav-link text-capitalize"
-                          >London SF</a
-                        >
-                      </li>
-                      <li class="nav-item">
-                        <a href="#" class="nav-link text-capitalize"
-                          >Cockfosters BP</a
-                        >
-                      </li>
-                      <li class="nav-item">
-                        <a href="#" class="nav-link text-capitalize"
-                          >Los Angeles</a
-                        >
-                      </li>
-                      <li class="nav-item">
-                        <a href="#" class="nav-link text-capitalize">Chicago</a>
-                      </li>
-                      <li class="nav-item">
-                        <a href="#" class="nav-link text-capitalize"
-                          >Las Vegas</a
-                        >
+                        {!! get_setting('about_us_description',null,App::getLocale()) !!}
                       </li>
                     </ul>
                   </div>
-                  <div class="col-6 col-md-3">
-                    <ul class="nav flex-column">
-                      <li class="nav-item text-uppercase px-2">Our Stories</li>
-                      <li class="nav-item">
-                        <a href="#" class="nav-link text-capitalize"
-                          >New York</a
-                        >
-                      </li>
-                      <li class="nav-item">
-                        <a href="#" class="nav-link text-capitalize"
-                          >London SF</a
-                        >
-                      </li>
-                      <li class="nav-item">
-                        <a href="#" class="nav-link text-capitalize"
-                          >Cockfosters BP</a
-                        >
-                      </li>
-                      <li class="nav-item">
-                        <a href="#" class="nav-link text-capitalize"
-                          >Los Angeles</a
-                        >
-                      </li>
-                      <li class="nav-item">
-                        <a href="#" class="nav-link text-capitalize">Chicago</a>
-                      </li>
-                      <li class="nav-item">
-                        <a href="#" class="nav-link text-capitalize"
-                          >Las Vegas</a
-                        >
-                      </li>
-                    </ul>
-                  </div>
-                  <div class="col-6 col-md-3 mt-4 mt-md-0">
-                    <ul class="nav flex-column">
-                      <li class="nav-item text-uppercase px-2">Our Stories</li>
-                      <li class="nav-item">
-                        <a href="#" class="nav-link text-capitalize"
-                          >New York</a
-                        >
-                      </li>
-                      <li class="nav-item">
-                        <a href="#" class="nav-link text-capitalize"
-                          >London SF</a
-                        >
-                      </li>
-                      <li class="nav-item">
-                        <a href="#" class="nav-link text-capitalize"
-                          >Cockfosters BP</a
-                        >
-                      </li>
-                      <li class="nav-item">
-                        <a href="#" class="nav-link text-capitalize"
-                          >Los Angeles</a
-                        >
-                      </li>
-                      <li class="nav-item">
-                        <a href="#" class="nav-link text-capitalize">Chicago</a>
-                      </li>
-                      <li class="nav-item">
-                        <a href="#" class="nav-link text-capitalize"
-                          >Las Vegas</a
-                        >
-                      </li>
-                    </ul>
-                  </div>
-                  <div class="col-6 col-md-3 mt-4 mt-md-0">
-                    <ul class="nav flex-column">
-                      <li class="nav-item text-uppercase px-2">Our Stories</li>
-                      <li class="nav-item">
-                        <a href="#" class="nav-link text-capitalize"
-                          >New York</a
-                        >
-                      </li>
-                      <li class="nav-item">
-                        <a href="#" class="nav-link text-capitalize"
-                          >London SF</a
-                        >
-                      </li>
-                      <li class="nav-item">
-                        <a href="#" class="nav-link text-capitalize"
-                          >Cockfosters BP</a
-                        >
-                      </li>
-                      <li class="nav-item">
-                        <a href="#" class="nav-link text-capitalize"
-                          >Los Angeles</a
-                        >
-                      </li>
-                      <li class="nav-item">
-                        <a href="#" class="nav-link text-capitalize">Chicago</a>
-                      </li>
-                      <li class="nav-item">
-                        <a href="#" class="nav-link text-capitalize"
-                          >Las Vegas</a
-                        >
+                  <div class="col-6 col-md-6 mt-4 mt-md-0">
+                    <ul class="nav flex-column"> 
+                      <li class="nav-item"> 
+                        <div class="fb-page" data-href="https://www.facebook.com/ubmdhaka" data-tabs="timeline" data-width="" data-height="200" data-small-header="false" data-adapt-container-width="true" data-hide-cover="false" data-show-facepile="true">
+                          <blockquote cite="https://www.facebook.com/ubmdhaka" class="fb-xfbml-parse-ignore">
+                            <a href="https://www.facebook.com/ubmdhaka">UK Bangla Mart</a>
+                          </blockquote>
+                        </div>
                       </li>
                     </ul>
                   </div>
                 </div>
               </div>
               <div class="col-sm-8 col-lg-4 mt-4 mt-lg-0">
-                <div class="general-footer-app-sec text-center text-sm-start">
-                  <h5 class="text-uppercase text-white mb-3">Available On:</h5>
-                  <div class="gerenal-footer-apps mb-3">
-                    <div class="row">
-                      <div class="col-6">
-                        <img
-                          src="assets/images/google-play-button.png"
-                          alt="Play Store"
-                          class="img-fluid"
-                        />
-                      </div>
-                      <div class="col-6">
-                        <img
-                          src="assets/images/app-store-button.png"
-                          alt="App Store"
-                          class="img-fluid"
-                        />
-                      </div>
-                    </div>
-                  </div>
+                <div class="general-footer-app-sec text-center text-sm-start mt-4"> 
                   <div
                     class="join-newsletter text-capitalize text-white fs-5 mb-3"
                   >
                     join newsletter
-                  </div>
-                  <div class="privacy-policy mb-3">
-                    <span>
-                      Will be used in accordance with our
-                      <a
-                        href="#"
-                        class="policy-text text-decoration-none link-light"
-                      >
-                        Privacy Policy
-                      </a>
-                    </span>
-                  </div>
+                  </div> 
                   <form method="POST" action="{{ route('subscribers.store') }}">
                     @csrf
                     <div class="input-group mb-3">
@@ -410,12 +277,18 @@
           <div class="container">
             <div class="row">
               <div class="col-sm-6 col-lg-4 mt-4 mt-lg-0 ps-3 ps-sm-0">
-                <h6 class="text-white mb-3 text-capitalize">Payment System:</h6>
-                <img
-                  src="assets/images/payment.png"
-                  alt="payment system"
-                  class="img-fluid"
-                />
+                <h6 class="text-white mb-3 text-capitalize">Payment System</h6>
+                
+                @if ( get_setting('payment_method_images') !=  null )
+                @foreach (explode(',', get_setting('payment_method_images')) as $key => $value)
+                    <img
+                      src="{{ uploaded_asset($value) }}"
+                      alt="payment system"
+                      class="img-fluid"
+                      style="max-height: 30px; width:40px; float:left; margin-right:10px"
+                    />
+                @endforeach
+                @endif
               </div>
               <div class="col-sm-6 col-lg-4 mt-4 mt-lg-0 ps-3 ps-sm-0">
                 <h6 class="text-white mb-3 text-capitalize">
@@ -432,21 +305,31 @@
                   Our Social Links:
                 </h6>
                 <div class="footer-social-links">
-                  <a href="#" class="social-link">
+                  @if ( get_setting('facebook_link') !=  null )
+                  <a href="{{ get_setting('facebook_link') }}" target="_blank" class="social-link">
                     <i class="fa-brands fa-facebook-f"></i>
                   </a>
-                  <a href="#" class="social-link">
+                  @endif
+                  @if ( get_setting('twitter_link') !=  null )
+                  <a href="{{ get_setting('twitter_link') }}" target="_blank" class="social-link">
                     <i class="fa-brands fa-twitter"></i>
                   </a>
-                  <a href="#" class="social-link">
-                    <i class="fa-brands fa-pinterest-p"></i>
+                  @endif
+                  @if ( get_setting('instagram_link') !=  null )
+                  <a href="{{ get_setting('instagram_link') }}" target="_blank" class="social-link">
+                    <i class="fa-brands lab la-instagram"></i>
                   </a>
-                  <a href="#" class="social-link">
-                    <i class="fa-brands fa-linkedin-in"></i>
+                  @endif 
+                  @if ( get_setting('youtube_link') !=  null )
+                  <a href="{{ get_setting('youtube_link') }}" target="_blank" class="social-link">
+                    <i class="fa-brands fa-youtube"></i>
                   </a>
-                  <a href="#" class="social-link">
-                    <i class="fab fa-telegram-plane"></i>
+                  @endif
+                  @if ( get_setting('linkedin_link') !=  null )
+                  <a href="{{ get_setting('linkedin_link') }}" target="_blank" class="social-link">
+                    <i class="fab fa-linkedin-in"></i>
                   </a>
+                  @endif
                 </div>
               </div>
             </div>

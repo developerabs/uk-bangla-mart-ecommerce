@@ -73,21 +73,31 @@ if(auth()->user() != null) {
           <ul class="nav right">
             <li class="nav-item">
               <div class="social-icons">
-                <a href="#">
-                  <i class="fab fa-facebook-f"></i>
+                @if ( get_setting('facebook_link') !=  null )
+                <a href="{{ get_setting('facebook_link') }}" target="_blank" class="social-link">
+                  <i class="fa-brands fa-facebook-f"></i>
                 </a>
-                <a href="#">
-                  <i class="fab fa-twitter"></i>
+                @endif
+                @if ( get_setting('twitter_link') !=  null )
+                <a href="{{ get_setting('twitter_link') }}" target="_blank" class="social-link">
+                  <i class="fa-brands fa-twitter"></i>
                 </a>
-                <a href="#">
-                  <i class="fab fa-pinterest"></i>
+                @endif
+                @if ( get_setting('instagram_link') !=  null )
+                <a href="{{ get_setting('instagram_link') }}" target="_blank" class="social-link">
+                  <i class="fa-brands lab la-instagram"></i>
                 </a>
-                <a href="#">
+                @endif 
+                @if ( get_setting('youtube_link') !=  null )
+                <a href="{{ get_setting('youtube_link') }}" target="_blank" class="social-link">
+                  <i class="fa-brands fa-youtube"></i>
+                </a>
+                @endif
+                @if ( get_setting('linkedin_link') !=  null )
+                <a href="{{ get_setting('linkedin_link') }}" target="_blank" class="social-link">
                   <i class="fab fa-linkedin-in"></i>
                 </a>
-                <a href="#">
-                  <i class="fab fa-telegram"></i>
-                </a>
+                @endif
               </div>
             </li> 
             <li class="nav-item">
@@ -406,7 +416,7 @@ if(auth()->user() != null) {
                   href="{{ route('dashboard') }}" 
                 >
                 
-                  <span>My Panel</span>
+                  <span>My Account</span>
                 </a> 
               </li>
               @endif
@@ -446,7 +456,10 @@ if(auth()->user() != null) {
               <li class="nav-item">
                 <a
                   class="nav-link text-uppercase" 
-                  href="{{ route('cart') }}" 
+                  data-bs-toggle="offcanvas"
+                  href="#shoppingCart"
+                  role="button"
+                  aria-controls="shoppingCart" 
                 >
                   <div
                     class="badge-group position-relative d-inline-block me-lg-2"
@@ -508,36 +521,12 @@ if(auth()->user() != null) {
                           <div class="col-9">
                             <div class="card-body">
                               <h6 class="card-title">{{  $product->getTranslation('name')  }}</h6>
-                              <div
-                                class="btn-group mb-2"
-                                role="group"
-                                aria-label="Product Button Group"
-                              >
-                                <button
-                                  type="button"
-                                  class="rw-btn-product"
-                                >
-                                  <i class="fa-solid fa-plus"></i>
-                                </button>
-                                <button
-                                  type="button"
-                                  class="rw-btn-product"
-                                >
-                                  <span class="counter">1</span>
-                                </button>
-                                <button
-                                  type="button"
-                                  class="rw-btn-product"
-                                >
-                                  <i class="fa-solid fa-minus"></i>
-                                </button>
-                              </div>
                               <div class="product-quantity">
                                 <span class="quantity">1</span>
                                 <i class="fa-solid fa-xmark"></i>
                                 <span class="price">{{ single_price($cartItem['price']) }}</span>
                               </div>
-                              <button type="button" class="close-btn">
+                              <button type="button" class="close-btn" onclick="removeFromCart({{ $cartItem['id'] }})">
                                 <i class="fa-solid fa-xmark"></i>
                               </button>
                             </div>
@@ -617,7 +606,7 @@ if(auth()->user() != null) {
               <i class="fas fa-angle-down text-muted"></i>
             </a>
             <!-- Top Bar Dropdown / start -->
-            <ul class="rw-dropdown-menu">
+            <ul class="rw-dropdown-menu" style="z-index: 999;">
               @foreach (\App\Models\Category::where('level', 0)->orderBy('order_level', 'desc')->get()->take(11) as $key => $category)
               <li class="rw-dropdown-secondary">
                 <a class="rw-dropdown-item" href="{{ route('products.category', $category->slug) }}">
