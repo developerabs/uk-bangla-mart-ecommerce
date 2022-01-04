@@ -2,17 +2,18 @@
 @section('content')
 
       <!-- Main Content / start -->
-      <main class="rw-archive-section">
+      <main class="rw-archive-section" style="background-color: rgb(240, 240, 240); padding-bottom:40px;">
     
         <!-- Body Content / start -->
         <section class="rw-body-content pt-5">
           <div class="container">
             <div class="row">
               <div class="col-lg-3">
-                <div class="side-bar" id="side-bar">
+                <div class="side-bar" id="side-bar" style="background-color: #fff; padding-bottom:10px;">
                   <div class="offcanvas-body">
                     <div class="side-block-wrapper">
-                      <h3 class="text-uppercase title mb-3">FILTER BY PRICE</h3>
+                      <h3 class="text-uppercase title mb-3">{{ translate('Price range')}}</h3>
+                      
                       <!-- multi range slider start -->
                       <input
                         id="price-range"
@@ -300,13 +301,6 @@
                       @endif
                     </ol>
                   </nav>
-                  <div class="show-product-amount d-none d-lg-block me-3">
-                    <span class="fw-bold">Show:</span>
-                    <span class="numberOfProducts px-2">9</span> /
-                    <span class="numberOfProducts px-2 active">12</span> /
-                    <span class="numberOfProducts px-2">18</span> /
-                    <span class="numberOfProducts px-2">24</span>
-                  </div>
                   <div class="sorting">
                     <select
                       class="form-select"
@@ -320,28 +314,6 @@
                     </select>
                   </div>
                 </div>
-                <div
-                  class="another-bread-filter d-flex align-items-center justify-content-between mt-3"
-                >
-                  <div class="show-product-amount d-lg-none">
-                    <span class="fw-bold">Show:</span>
-                    <span class="numberOfProducts px-2">9</span> /
-                    <span class="numberOfProducts px-2 active">12</span> /
-                    <span class="numberOfProducts px-2">18</span> /
-                    <span class="numberOfProducts px-2">24</span>
-                  </div>
-                  <button
-                    type="button"
-                    class="rw-btn me-3 mt-0 rounded-pill text-uppercase d-block d-lg-none"
-                    type="button"
-                    data-bs-toggle="offcanvas"
-                    data-bs-target="#side-bar"
-                    aria-controls="side-bar"
-                  >
-                    <i class="fa-solid fa-filter fa-lg"></i>
-                    Filter
-                  </button>
-                </div>
                 <h1 class="h6 fw-600 text-body">
                   @if(isset($category_id))
                       {{ \App\Models\Category::find($category_id)->getTranslation('name') }}
@@ -351,7 +323,7 @@
                       {{ translate('All Products') }}
                   @endif
               </h1>
-                <div class="products-wrapper py-2 mt-4">
+                <div class="products-wrapper py-2 mt-4" style="background-color: #fff; padding-bottom:10px;">
                   <ul class="products">
                     @foreach ($products as $key => $product)
                     <li class="product">
@@ -374,9 +346,6 @@
                             </a>
                           </h6>
                           <div class="tags">
-                            <div class="rating rating-sm mt-1">
-                                {{ renderStarRating($product->rating) }}
-                            </div>
                           </div>
                           <div class="price">
                             <span class="price-text">{{ home_discounted_base_price($product) }}</span>

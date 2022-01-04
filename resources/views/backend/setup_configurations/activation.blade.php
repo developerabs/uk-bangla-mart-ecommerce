@@ -2,7 +2,7 @@
 
 @section('content')
 
-<h4 class="text-center text-muted">{{translate('System')}}</h4>
+{{-- <h4 class="text-center text-muted">{{translate('System')}}</h4>
 <div class="row">
     <div class="col-lg-4">
         <div class="card">
@@ -43,12 +43,12 @@
             </div>
         </div>
     </div>
-</div>
+</div> --}}
 
 
 <h4 class="text-center text-muted mt-4">{{translate('Business Related')}}</h4>
 <div class="row">
-    <div class="col-lg-4">
+    {{-- <div class="col-lg-4">
         <div class="card">
             <div class="card-header">
                 <h3 class="mb-0 h6 text-center">{{translate('Vendor System Activation')}}</h3>
@@ -60,8 +60,8 @@
                 </label>
             </div>
         </div>
-    </div>
-    <div class="col-lg-4">
+    </div> --}}
+    {{-- <div class="col-lg-4">
         <div class="card">
             <div class="card-header">
                 <h3 class="mb-0 h6 text-center">{{translate('Classified Product')}}</h3>
@@ -73,8 +73,8 @@
                 </label>
             </div>
         </div>
-    </div>
-    <div class="col-lg-4">
+    </div> --}}
+    {{-- <div class="col-lg-4">
         <div class="card">
             <div class="card-header">
                 <h3 class="mb-0 h6 text-center">{{translate('Wallet System Activation')}}</h3>
@@ -86,7 +86,7 @@
                 </label>
             </div>
         </div>
-    </div>
+    </div> --}}
     <div class="col-lg-4">
         <div class="card">
             <div class="card-header">
@@ -100,7 +100,7 @@
             </div>
         </div>
     </div>
-    <div class="col-lg-4">
+    {{-- <div class="col-lg-4">
         <div class="card">
             <div class="card-header">
                 <h3 class="mb-0 h6 text-center">{{translate('Pickup Point Activation')}}</h3>
@@ -112,7 +112,7 @@
                 </label>
             </div>
         </div>
-    </div>
+    </div> --}}
     <div class="col-lg-4">
         <div class="card">
             <div class="card-header">
@@ -126,7 +126,7 @@
             </div>
         </div>
     </div>
-    <div class="col-lg-4">
+    {{-- <div class="col-lg-4">
         <div class="card">
             <div class="card-header">
                 <h3 class="mb-0 h6 text-center">{{translate('Seller Product Manage By Admin')}}</h3>
@@ -143,8 +143,8 @@
                 </div>
             </div>
         </div>
-    </div>
-    <div class="col-lg-4">
+    </div> --}}
+    {{-- <div class="col-lg-4">
         <div class="card">
             <div class="card-header">
                 <h3 class="mb-0 h6 text-center">{{translate('Admin Approval On Seller Product')}}</h3>
@@ -161,7 +161,7 @@
                 </div>
             </div>
         </div>
-    </div>
+    </div> --}}
     <div class="col-lg-4">
         <div class="card">
             <div class="card-header">
@@ -241,7 +241,7 @@
     </div>
 </div>
 <div class="row">
-    <div class="col-lg-4">
+    {{-- <div class="col-lg-4">
         <div class="card">
             <div class="card-header">
                 <h3 class="mb-0 h6 text-center">{{translate('Instamojo Payment Activation')}}</h3>
@@ -259,8 +259,8 @@
                 </div>
             </div>
         </div>
-    </div>
-    <div class="col-lg-4">
+    </div> --}}
+    {{-- <div class="col-lg-4">
         <div class="card">
             <div class="card-header">
                 <h3 class="mb-0 h6 text-center">{{translate('Razor Pay Activation')}}</h3>
@@ -278,9 +278,9 @@
                 </div>
             </div>
         </div>
-    </div>
+    </div> --}}
 
-    <div class="col-lg-4">
+    {{-- <div class="col-lg-4">
         <div class="card">
             <div class="card-header">
                 <h3 class="mb-0 h6 text-center">{{translate('PayStack Activation')}}</h3>
@@ -298,10 +298,10 @@
                 </div>
             </div>
         </div>
-    </div>
+    </div> --}}
 </div>
 <div class="row">
-    <div class="col-lg-4">
+    {{-- <div class="col-lg-4">
         <div class="card">
             <div class="card-header">
                 <h3 class="mb-0 h6 text-center">{{translate('VoguePay Activation')}}</h3>
@@ -319,8 +319,8 @@
                 </div>
             </div>
         </div>
-    </div>
-    <div class="col-lg-4">
+    </div> --}}
+    {{-- <div class="col-lg-4">
         <div class="card">
             <div class="card-header">
                 <h3 class="mb-0 h6 text-center">{{translate('Payhere Activation')}}</h3>
@@ -338,9 +338,9 @@
                 </div>
             </div>
         </div>
-    </div>
+    </div> --}}
 
-    <div class="col-lg-4">
+    {{-- <div class="col-lg-4">
         <div class="card">
             <div class="card-header">
                 <h3 class="mb-0 h6 text-center">{{translate('Ngenius Activation')}}</h3>
@@ -358,9 +358,9 @@
                 </div>
             </div>
         </div>
-    </div>
+    </div> --}}
 
-    <div class="col-lg-4">
+    {{-- <div class="col-lg-4">
         <div class="card">
             <div class="card-header">
                 <h3 class="mb-0 h6 text-center">{{translate('Iyzico Activation')}}</h3>
@@ -378,7 +378,7 @@
                 </div>
             </div>
         </div>
-    </div>
+    </div> --}}
 
     <div class="col-lg-4">
         <div class="card">
@@ -420,7 +420,7 @@
         </div>
     </div>
 
-    <div class="col-lg-4">
+    {{-- <div class="col-lg-4">
         <div class="card">
             <div class="card-header">
                 <h3 class="mb-0 h6 text-center">{{translate('Proxy Pay Activation')}}</h3>
@@ -438,7 +438,7 @@
                 </div>
             </div>
         </div>
-    </div>
+    </div> --}}
 
     <div class="col-lg-4">
         <div class="card">
@@ -460,7 +460,7 @@
         </div>
     </div>
 
-    <div class="col-lg-4">
+    {{-- <div class="col-lg-4">
         <div class="card">
             <div class="card-header">
                 <h3 class="mb-0 h6 text-center">{{translate('Authorize Net Activation')}}</h3>
@@ -478,9 +478,9 @@
                 </div>
             </div>
         </div>
-    </div>
+    </div> --}}
 
-    <div class="col-lg-4">
+    {{-- <div class="col-lg-4">
         <div class="card">
             <div class="card-header">
                 <h3 class="mb-0 h6 text-center">{{translate('Payku Activation')}}</h3>
@@ -498,7 +498,7 @@
                 </div>
             </div>
         </div>
-    </div>
+    </div> --}}
 
     <div class="col-lg-4">
         <div class="card">

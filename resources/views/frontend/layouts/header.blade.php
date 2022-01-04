@@ -18,7 +18,7 @@ if(auth()->user() != null) {
         <nav class="top-bar-inner d-flex justify-content-between">
           <ul class="nav left">
             @if(get_setting('show_language_switcher') == 'on')
-            <li class="nav-item rw-dropdown">
+            <li class="nav-item rw-dropdown" id="lang-change">
               @php
                     if(Session::has('locale')){
                         $locale = Session::get('locale', Config::get('app.locale'));
@@ -32,17 +32,17 @@ if(auth()->user() != null) {
                 <i class="fas fa-angle-down text-muted"></i>
               </a>
               <!-- Top Bar Dropdown / start -->
-              <ul class="rw-dropdown-menu">
+              <ul class="rw-dropdown-menu langChange">
                 @foreach (\App\Models\Language::all() as $key => $language)
                 <li>
-                  <a class="rw-dropdown-item" href="#">{{ $language->name }}</a>
+                  <a href="javascript:void(0)" data-flag="{{ $language->code }}" class="rw-dropdown-item">{{ $language->name }}</a>
                 </li>
                 @endforeach 
               </ul>
             </li>
             @endif
             @if(get_setting('show_currency_switcher') == 'on')
-            <li class="nav-item rw-dropdown">
+            <li class="nav-item rw-dropdown" id="currency-change">
               @php
                   if(Session::has('currency_code')){
                       $currency_code = Session::get('currency_code');
@@ -58,10 +58,10 @@ if(auth()->user() != null) {
                 <i class="fas fa-angle-down text-muted"></i>
               </a>
               <!-- Top Bar Dropdown / start -->
-              <ul class="rw-dropdown-menu">
+              <ul class="rw-dropdown-menu currencyChange">
                 @foreach (\App\Models\Currency::where('status', 1)->get() as $key => $currency)
-                <li>
-                  <a class="rw-dropdown-item" href="#">
+                <li >
+                  <a class="rw-dropdown-item" href="javascript:void(0)" data-currency="{{ $currency->code }}">
                     {{ $currency->name }} ({{ $currency->symbol }})
                   </a>
                 </li>
@@ -396,7 +396,7 @@ if(auth()->user() != null) {
                   href="{{ route('admin.dashboard') }}" 
                 >
                 
-                  <span>My Panel</span>
+                  <span>My Account</span>
                 </a> 
               </li>
               @else

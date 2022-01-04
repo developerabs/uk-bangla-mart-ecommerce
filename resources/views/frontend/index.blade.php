@@ -28,7 +28,7 @@
     <!-- Body Content / start -->
     <section class="rw-body-content">
         <!-- Favourite Product / start -->
-        <div class="favourite-product">
+        {{-- <div class="favourite-product">
           <div class="container"> 
             <div class="row mt-4 mb-5">
               <div class="col-sm-6 col-lg-3 mt-4 mt-sm-0">
@@ -69,9 +69,9 @@
               </div>
             </div>
           </div>
-        </div>
+        </div> --}}
 
-
+        <div class="mt-4"></div>
       <!-- Specific Type of Product / start -->
       <div class="specific-product mb-4">
         <div class="container">
@@ -114,14 +114,16 @@
                               ></i>
                             </a> 
                             <a
-                              href="#"
+                              href="javascript:void(0)" 
+                              onclick="addToCompare({{ $item->id }})"
                               class="text-decoration-none"
                               title="Compare"
                             >
                               <i class="fa-solid fa-code-compare fa-lg"></i>
                             </a>
                             <a
-                              href="#"
+                              href="javascript:void(0)" 
+                              onclick="addToWishList({{ $item->id }})"
                               class="text-decoration-none"
                               title="Favourite"
                             >
@@ -135,10 +137,7 @@
                               {{  $item->getTranslation('name')  }}
                             </a>
                           </h6>
-                          <div class="tags"> 
-                            <div class="rating rating-sm mt-1">
-                                {{ renderStarRating($item->rating) }}
-                            </div>
+                          <div class="tags">  
                           </div>
                           <div class="price">
                             <span class="price-text">{{ home_discounted_base_price($item) }}</span> 
@@ -238,14 +237,16 @@
                               ></i>
                             </a> 
                             <a
-                              href="#"
+                              href="javascript:void(0)" 
+                              onclick="addToCompare({{ $item->id }})"
                               class="text-decoration-none"
                               title="Compare"
                             >
                               <i class="fa-solid fa-code-compare fa-lg"></i>
                             </a>
                             <a
-                              href="#"
+                              href="javascript:void(0)" 
+                              onclick="addToWishList({{ $item->id }})"
                               class="text-decoration-none"
                               title="Favourite"
                             >
@@ -259,10 +260,7 @@
                               {{  $item->getTranslation('name')  }}
                             </a>
                           </h6>
-                          <div class="tags"> 
-                            <div class="rating rating-sm mt-1">
-                                {{ renderStarRating($item->rating) }}
-                            </div>
+                          <div class="tags">  
                           </div>
                           <div class="price">
                             <span class="price-text">{{ home_discounted_base_price($item) }}</span> 
@@ -322,14 +320,16 @@
                               ></i>
                             </a> 
                             <a
-                              href="#"
+                              href="javascript:void(0)" 
+                              onclick="addToCompare({{ $item->id }})"
                               class="text-decoration-none"
                               title="Compare"
                             >
                               <i class="fa-solid fa-code-compare fa-lg"></i>
                             </a>
                             <a
-                              href="#"
+                              href="javascript:void(0)" 
+                              onclick="addToWishList({{ $item->id }})"
                               class="text-decoration-none"
                               title="Favourite"
                             >
@@ -343,10 +343,7 @@
                               {{  $item->getTranslation('name')  }}
                             </a>
                           </h6>
-                          <div class="tags"> 
-                            <div class="rating rating-sm mt-1">
-                                {{ renderStarRating($item->rating) }}
-                            </div>
+                          <div class="tags">  
                           </div>
                           <div class="price">
                             <span class="price-text">{{ home_discounted_base_price($item) }}</span> 

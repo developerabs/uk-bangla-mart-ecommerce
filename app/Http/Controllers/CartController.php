@@ -54,9 +54,13 @@ class CartController extends Controller
     public function addToCart(Request $request) 
     { 
         $product = Product::find($request->id);
+        // $product_stock = ProductStock::where('product_id',$request->id)->first();
         $carts = Cart::where('product_id', $product->id)->first();
         $data = array();
-        
+
+        // if ( $product_stock->qty == 0 ) {
+        //     return 3;
+        // }
         if(auth()->user() != null) {
             $user_id = Auth::user()->id;
             $data['user_id'] = $user_id;

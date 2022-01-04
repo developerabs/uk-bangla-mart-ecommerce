@@ -378,21 +378,24 @@
                       </a>
                     </span>
                   </div>
-                  <form action="#" method="post">
+                  <form method="POST" action="{{ route('subscribers.store') }}">
+                    @csrf
                     <div class="input-group mb-3">
                       <input
-                        type="text"
+                        type="email"
                         class="form-control form-control-lg bg-transparent text-white rounded-pill me-2"
                         placeholder="Your email address"
                         aria-label="User's email"
                         aria-describedby="footer-subscribtion"
+                        name="email" 
+                        required
                       />
                       <button
                         type="submit"
-                        class="btn bg-green text-white fs-7 px-4 rounded-pill text-uppercase"
+                        class="btn bg-success text-white fs-7 px-4 rounded-pill text-uppercase"
                         id="footer-subscribtion"
                       >
-                        Sign Up
+                        Subscribe
                       </button>
                     </div>
                   </form>
@@ -454,15 +457,16 @@
         <section class="copyright-footer bg-blue py-3">
           <div class="container">
             <div class="copyright-text text-center text-uppercase">
-              <a href="#" class="text-decoration-none text-white">Woodmart</a>
-              &copy; 2021 created by ExteritBD.
+              <a href="#" class="text-decoration-none text-white">uk bangla mart</a>
+              &copy; @php
+                  echo date("Y");
+              @endphp (All right reserved)
             </div>
           </div>
         </section>
       </footer>
       <!-- Footer Section / end -->
-    </div>
-
+    </div> 
     <!-- Bootstrap JavaScript Libraries -->
     <script src="https://code.jquery.com/jquery-3.6.0.min.js" integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4=" crossorigin="anonymous"></script>
     <script src="{{ static_asset('frontend/assets/modules/bootstrap/js/bootstrap.bundle.min.js') }}"></script>
@@ -475,6 +479,94 @@
     <script src="{{ static_asset('frontend/assets/js/index.js') }}"></script>
     <script src="{{ static_asset('frontend/assets/js/home.js') }}"></script>  
     <script src="{{ static_asset('frontend/assets/js/my-account.js') }}"></script>  
+    <script>
+      @foreach (session('flash_notification', collect())->toArray() as $message)
+      let timerInterval
+                    Swal.fire({
+                      title: '{{ $message['message'] }}', 
+                      timer: 2000,
+                      timerProgressBar: true,
+                      didOpen: () => {
+                        Swal.showLoading()
+                        const b = Swal.getHtmlContainer().querySelector('b')
+                        timerInterval = setInterval(() => {
+                          b.textContent = Swal.getTimerLeft()
+                        }, 100)
+                      },
+                      willClose: () => {
+                        clearInterval(timerInterval)
+                      }
+                    }).then((result) => {
+                      /* Read more about handling dismissals below */
+                      if (result.dismiss === Swal.DismissReason.timer) {
+                        console.log('I was closed by the timer')
+                      }
+                    }) 
+      @endforeach
+  </script>
+    <script>
+      $(document).ready(function() {
+            $('.category-nav-element').each(function(i, el) {
+                $(el).on('mouseover', function(){
+                    if(!$(el).find('.sub-cat-menu').hasClass('loaded')){
+                        $.post('{{ route('category.elements') }}', {_token: AIZ.data.csrf, id:$(el).data('id')}, function(data){
+                            $(el).find('.sub-cat-menu').addClass('loaded').html(data);
+                        });
+                    }
+                });
+            });
+
+            if ($('#lang-change').length > 0) {
+                $('#lang-change .langChange li a').each(function() {
+                    $(this).on('click', function(e){
+                        e.preventDefault();
+                        var $this = $(this);
+                        var locale = $this.data('flag');
+                        $.ajax({ 
+                            headers: {
+                              'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                            },
+                            type:"post",
+                            url: '{{ route('language.change') }}',
+                            data: {locale:locale}, 
+                            success: function(data){
+                              location.reload();
+                            },
+                            error: function() {
+                              alert('error')
+                            }
+                        });
+
+                    });
+                });
+            }
+
+            if ($('#currency-change').length > 0) {
+                $('#currency-change .currencyChange li a').each(function() {
+                    $(this).on('click', function(e){
+                        e.preventDefault();
+                        var $this = $(this);
+                        var currency_code = $this.data('currency');
+                        $.ajax({ 
+                            headers: {
+                              'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                            },
+                            type:"post",
+                            url: '{{ route('currency.change') }}',
+                            data: {currency_code:currency_code}, 
+                            success: function(data){
+                              location.reload();
+                            },
+                            error: function() {
+                              alert('error')
+                            }
+                        });
+
+                    });
+                });
+            }
+        });
+    </script>
     <script> 
         function addToCompare(id){ 
           $.ajax({ 
@@ -635,10 +727,31 @@
                         console.log('I was closed by the timer')
                       }
                     })
+                }else if(data == 3){
+                  let timerInterval
+                    Swal.fire({
+                      title: 'Out of stock', 
+                      timer: 2000,
+                      timerProgressBar: true,
+                      didOpen: () => {
+                        Swal.showLoading()
+                        const b = Swal.getHtmlContainer().querySelector('b')
+                        timerInterval = setInterval(() => {
+                          b.textContent = Swal.getTimerLeft()
+                        }, 100)
+                      },
+                      willClose: () => {
+                        clearInterval(timerInterval)
+                      }
+                    }).then((result) => {
+                      /* Read more about handling dismissals below */
+                      if (result.dismiss === Swal.DismissReason.timer) {
+                        console.log('I was closed by the timer')
+                      }
+                    })
                 }
                 
-                  countCarts();
-                  location.reload();
+                location.reload();
               },
               error: function() {
                 alert('error')
