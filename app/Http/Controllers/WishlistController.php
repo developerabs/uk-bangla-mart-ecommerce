@@ -56,7 +56,7 @@ class WishlistController extends Controller
         $wishlist = Wishlist::findOrFail($request->id);
         if($wishlist!=null){
             if(Wishlist::destroy($request->id)){
-                return view('frontend.partials.wishlist');
+                return 1;
             }
         }
     }

@@ -89,13 +89,7 @@ if(auth()->user() != null) {
                   <i class="fab fa-telegram"></i>
                 </a>
               </div>
-            </li>
-            <li class="nav-item">
-              <a class="nav-link text-uppercase" href="#">
-                <i class="far fa-envelope me-1 fa-sm"></i>
-                <span>Newsletter</span>
-              </a>
-            </li>
+            </li> 
             <li class="nav-item">
               <a class="nav-link text-uppercase" href="#">Contact Us</a>
             </li>

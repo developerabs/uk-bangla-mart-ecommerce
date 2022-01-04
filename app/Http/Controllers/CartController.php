@@ -376,11 +376,7 @@ class CartController extends Controller
             $carts = Cart::where('temp_user_id', $temp_user_id)->get();
         }
 
-        return array(
-            'cart_count' => count($carts),
-            'cart_view' => view('frontend.partials.cart_details', compact('carts'))->render(),
-            'nav_cart_view' => view('frontend.partials.cart')->render(),
-        );
+        return 1;
     }
 
     //updated the quantity for a cart item

@@ -645,6 +645,10 @@
               }
           });
         }
+
+        
+
+
         function countCarts(){ 
           $.ajax({ 
                 headers: {
@@ -661,11 +665,51 @@
             });
         }
     </script> 
+
+    <script>
+      function removeFromCart(id){
+          $.ajax({ 
+                headers: {
+                  'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                },
+                type:"post",
+                url: '{{ route('cart.removeFromCart') }}', 
+                data: {id : id},
+                success: function(data){
+                  countCarts();
+                  location.reload(); 
+                },
+                error: function() {
+                  alert('error')
+                }
+            });
+            
+        }
+    </script>
     <script type="text/javascript">
       function removeFromWishlist(id){
-          $.post('{{ route('wishlists.remove') }}',{_token:'{{ csrf_token() }}', id:id}, function(data){
-              alert('success')
-          })
+        $.ajax({ 
+                headers: {
+                  'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                },
+                type:"post",
+                url: '{{ route('wishlists.remove') }}', 
+                data: {id : id},
+                success: function(data){
+                  location.reload(); 
+                },
+                error: function() {
+                  alert('error')
+                }
+            });
       }
   </script> 
+  <script>
+    function updateNavCart(view,count){
+            $('.cart-count').html(count);
+            $('#cart_items').html(view);
+        }
+
+        
+  </script>
 
