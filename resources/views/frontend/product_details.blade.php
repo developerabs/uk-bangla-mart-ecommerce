@@ -35,6 +35,9 @@
 @endsection
 
 @section('content')
+ <!-- Main Content / start -->
+ <main class="rw-archive-section" style="background-color: rgb(240, 240, 240); padding-bottom:40px;">
+  
     <section class="mb-4 pt-3">
         <div class="container">
             <div class="bg-white shadow-sm rounded p-3">
@@ -50,7 +53,7 @@
                                         <div class="carousel-box img-zoom rounded">
                                             <img
                                                 class="img-fluid lazyload"
-                                                src="{{ static_asset('assets/img/placeholder.jpg') }}"
+                                                src="{{ uploaded_asset($photo) }}"
                                                 data-src="{{ uploaded_asset($photo) }}"
                                                 onerror="this.onerror=null;this.src='{{ static_asset('assets/img/placeholder.jpg') }}';"
                                             >
@@ -61,7 +64,7 @@
                                             <div class="carousel-box img-zoom rounded">
                                                 <img
                                                     class="img-fluid lazyload"
-                                                    src="{{ static_asset('assets/img/placeholder.jpg') }}"
+                                                    src="{{ uploaded_asset($stock->image) }}"
                                                     data-src="{{ uploaded_asset($stock->image) }}"
                                                     onerror="this.onerror=null;this.src='{{ static_asset('assets/img/placeholder.jpg') }}';"
                                                 >
@@ -76,9 +79,9 @@
                                     <div class="carousel-box c-pointer border p-1 rounded">
                                         <img
                                             class="lazyload mw-100 size-50px mx-auto"
-                                            src="{{ static_asset('assets/img/placeholder.jpg') }}"
+                                            src="{{ uploaded_asset($photo) }}"
                                             data-src="{{ uploaded_asset($photo) }}"
-                                            onerror="this.onerror=null;this.src='{{ static_asset('assets/img/placeholder.jpg') }}';"
+                                            onerror="this.onerror=null;this.src='{{ uploaded_asset($photo) }}';"
                                         >
                                     </div>
                                     @endforeach
@@ -87,9 +90,9 @@
                                             <div class="carousel-box c-pointer border p-1 rounded" data-variation="{{ $stock->variant }}">
                                                 <img
                                                     class="lazyload mw-100 size-50px mx-auto"
-                                                    src="{{ static_asset('assets/img/placeholder.jpg') }}"
+                                                    src="{{ uploaded_asset($stock->image) }}"
                                                     data-src="{{ uploaded_asset($stock->image) }}"
-                                                    onerror="this.onerror=null;this.src='{{ static_asset('assets/img/placeholder.jpg') }}';"
+                                                    onerror="this.onerror=null;this.src='{{ uploaded_asset($stock->image) }}';"
                                                 >
                                             </div>
                                         @endif
@@ -740,6 +743,8 @@
             </div>
         </div>
     </section>
+    
+</main>
 
 @endsection
 

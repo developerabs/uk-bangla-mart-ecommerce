@@ -685,4 +685,13 @@ class HomeController extends Controller
         $products = filter_products(Product::where('added_by', 'admin'))->with('taxes')->paginate(12)->appends(request()->query());
         return view('frontend.inhouse_products', compact('products'));
     }
+
+
+
+    public function faq(){
+        return view('frontend.pages.faq');
+    }
+    public function contact(){
+        return view('frontend.pages.contact');
+    }
 }

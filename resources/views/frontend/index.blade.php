@@ -361,6 +361,116 @@
         </div>
       </div>
 
+               <!-- Special Sale Offers / start -->
+               <div class="special-sale-offer mb-5">
+                <div class="container">
+                  <div class="row">
+                    <div class="col-xl-12">
+                      <div class="common-products-wrapper">
+                        <div class="sec-heading">
+                          <h2 class="heading text-uppercase">name</h2>
+    
+                          <div class="carousel-controls ms-auto"> 
+                            <strong>All</strong>
+                          </div>
+                        </div>
+                        <div class="products-wrapper"> 
+                          <div class="tab-content" id="special-products-tabContent">
+                            <div
+                              class="tab-pane fade show active"
+                              id="special-sale-new"
+                              role="tabpanel"
+                              aria-labelledby="special-sale-new-tab"
+                            >
+                              <ul class="products" style="grid-template-columns: repeat(6, 1fr);">
+                                @foreach ($featured_products as $item)
+                                <li class="product">
+                                  <div class="product-inner">
+                                    <div class="backdrop"></div>
+                                    <div class="product-thumbnail">
+                                      <a
+                                        href="#"
+                                        class="text-decoration-none d-block"
+                                      >
+                                        <figure class="product-img">
+                                          <img
+                                            src="assets/images/retail-product-1-opt-330x340.jpg"
+                                            alt="Product"
+                                          />
+                                        </figure>
+                                      </a>
+                                      <div class="product-options">
+                                        <a
+                                          href="#"
+                                          class="text-decoration-none"
+                                          title="Compare"
+                                        >
+                                          <i
+                                            class="fa-solid fa-code-compare fa-lg"
+                                          ></i>
+                                        </a>
+                                      </div>
+                                    </div>
+                                    <div class="product-content">
+                                      <h6 class="product-name text-capitalize">
+                                        <a href="#" class="text-decoration-none">
+                                          Wooden Table
+                                        </a>
+                                      </h6>
+                                      <div class="tags">
+                                        <a href="#" class="tag text-decoration-none"
+                                          >Retail</a
+                                        >
+                                      </div>
+                                      <div class="price">
+                                        <span class="price-text">$155.00</span>
+                                      </div>
+                                      <div class="fadein-content">
+                                        <div class="product-details">
+                                          <p
+                                            class="detail-content line-clamp line-clamp-3"
+                                          >
+                                            Amet consectetur adipisicing elit. Ipsa
+                                            quos delectus assumenda voluptatibus
+                                            suscipit quibusdam maiores nostrum
+                                            consequuntur, cumque eligendi!
+                                          </p>
+                                          <div class="show-more">
+                                            <i class="fa-solid fa-ellipsis"></i>
+                                          </div>
+                                        </div>
+                                        <div class="product-option-icons">
+                                          <a href="#" class="text-decoration-none">
+                                            <i
+                                              class="fa-regular fa-heart fa-lg"
+                                            ></i>
+                                          </a>
+                                          <a href="#" class="text-decoration-none">
+                                            <i
+                                              class="fa-solid fa-cart-shopping fa-lg"
+                                            ></i>
+                                          </a>
+                                          <a href="#" class="text-decoration-none">
+                                            <i
+                                              class="fa-solid fa-magnifying-glass fa-lg"
+                                            ></i>
+                                          </a>
+                                        </div>
+                                      </div>
+                                    </div>
+                                  </div>
+                                </li>
+                                @endforeach
+                              </ul>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
 
        
       

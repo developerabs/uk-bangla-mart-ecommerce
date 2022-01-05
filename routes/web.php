@@ -50,6 +50,10 @@ Route::get('/users/registration', 'HomeController@registration')->name('user.reg
 //Route::post('/users/login', 'HomeController@user_login')->name('user.login.submit');
 Route::post('/users/login/cart', 'HomeController@cart_login')->name('cart.login.submit');
 
+//page routes
+Route::get('/contact-us', 'HomeController@contact')->name('page.contact');
+Route::get('/faq', 'HomeController@faq')->name('page.faq');
+
 //Home Page
 Route::get('/', 'HomeController@index')->name('home');
 Route::post('/home/section/featured', 'HomeController@load_featured_section')->name('home.section.featured');

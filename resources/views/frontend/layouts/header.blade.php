@@ -17,7 +17,7 @@ if(auth()->user() != null) {
       <div class="container">
         <nav class="top-bar-inner d-flex justify-content-between">
           <ul class="nav left">
-            @if(get_setting('show_language_switcher') == 'on')
+            {{-- @if(get_setting('show_language_switcher') == 'on')
             <li class="nav-item rw-dropdown" id="lang-change">
               @php
                     if(Session::has('locale')){
@@ -40,7 +40,7 @@ if(auth()->user() != null) {
                 @endforeach 
               </ul>
             </li>
-            @endif
+            @endif --}}
             @if(get_setting('show_currency_switcher') == 'on')
             <li class="nav-item rw-dropdown" id="currency-change">
               @php
@@ -101,10 +101,10 @@ if(auth()->user() != null) {
               </div>
             </li> 
             <li class="nav-item">
-              <a class="nav-link text-uppercase" href="#">Contact Us</a>
+              <a class="nav-link text-uppercase" href="{{ route('page.contact') }}">Contact Us</a>
             </li>
             <li class="nav-item">
-              <a class="nav-link text-uppercase" href="#">faqs</a>
+              <a class="nav-link text-uppercase" href="{{ route('page.faq') }}">faqs</a>
             </li>
           </ul>
         </nav>
@@ -611,8 +611,15 @@ if(auth()->user() != null) {
               <li class="rw-dropdown-secondary">
                 <a class="rw-dropdown-item" href="{{ route('products.category', $category->slug) }}">
                   <span class="rw-dropdown-text">
-                    <i class="fa-solid fa-chair"></i>
-                    {{ $category->getTranslation('name') }}
+                    <img
+                        class="cat-image lazyload mr-4 opacity-60"
+                        src="{{ static_asset('assets/img/placeholder.jpg') }}"
+                        data-src="{{ uploaded_asset($category->icon) }}"
+                        width="16"
+                        alt="{{ $category->getTranslation('name') }}"
+                        onerror="this.onerror=null;this.src='{{ static_asset('assets/img/placeholder.jpg') }}';"
+                    >
+                    <span style="margin:auto 10px;">{{ $category->getTranslation('name') }}</span>
                   </span>
                   <i class="fa-solid fa-angle-right"></i>
                 </a>
